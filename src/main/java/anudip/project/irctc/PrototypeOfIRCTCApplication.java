@@ -9,5 +9,4 @@ public class PrototypeOfIRCTCApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PrototypeOfIRCTCApplication.class, args);
 	}
-
 }

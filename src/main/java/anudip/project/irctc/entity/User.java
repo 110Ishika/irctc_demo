@@ -11,9 +11,8 @@ import lombok.Setter;
 @Table(name = "tbl_user")
 @Entity
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private int userId;
 
@@ -32,6 +31,6 @@ public class User {
     @Column(nullable = false, length = 10)
     private String role;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
-    private String status;
+    @Column(nullable = false, columnDefinition = "default 0")
+    private int status;
 }

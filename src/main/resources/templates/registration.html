@@ -9,22 +9,33 @@
     /* Custom styles */
     body {
       background-color: lightBlue;
+      background-image:url("/image/vb.jpg");
+      background-repeat:no-repeat;
+      background-size:cover;
+     background-position:center;
     }
     .form-container {
       max-width: 500px;
       margin: 0 auto;
       padding: 20px;
       background-color: #fff;
-      margin-top: 50px;
+      margin-top: 4px;
       border-radius: 10px;
+      margin-left:140px;
+    }
+    .logo
+    {
+margin-left:20px;
+margin-top:8px;
     }
   </style>
 </head>
 <body>
+<div class="logo"><img src="/image/secondry-logo.png" height="80px" width="80px"></img></div>
   <div class="container">
     <div class="form-container">
       <h2 class="text-center mb-4">Create IRCTC Account</h2>
-      <form id="registrationForm" method="post" action="#">
+      <form id="registrationForm" method="post" action="">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="First Name" id="firstName" required>
         </div>

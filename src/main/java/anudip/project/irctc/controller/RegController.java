@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class RegController {
 	
-	@GetMapping()
+	@GetMapping("/registration")
 	public String regPage()
 	{
-		return "registration.html";
+		return "registration";
 	}
 	
 }

@@ -19,13 +19,12 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-
 @RequestMapping("irctc/registration")
 public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping
+	@PostMapping("/create")
 	public ResponseEntity<User> createUser(@RequestBody User user)
 	{
 		User newUser=userService.createUser(user);
@@ -37,7 +36,7 @@ public class UserController {
 	public ResponseEntity<List<User>> getAlluser()
 	{
 		List<User> list=userService.getAllUser();
-		return new ResponseEntity<>(list,HttpStatus.OK); 
+		return ResponseEntity.ok(list);
 		
 	}
 	

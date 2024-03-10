@@ -1,6 +1,8 @@
 package anudip.project.irctc.service.ServiceImp;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 
 import anudip.project.irctc.entity.UserVerification;
@@ -43,31 +45,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
-        User savedUser = userRepository.save(user);
-        int otp = generateOTP();
+        if(user.getUserId() != 0)
+            return updateUser(user);
+        return userRepository.save(user);
+    }
 
-        userVerificationRepository.save(new UserVerification(user.getEmail(), otp));
+    @Override
+    public void saveUserAndSentOtp(User user){
+        User existedUser = saveUser(user);
+        int otp = generateOTP();
+        userVerificationRepository.save(new UserVerification(user.getEmail(), otp, new Date()));
 
         try {
-            triggerMail(user.getEmail(), user.getFirstName(), otp);
+            sentVerificationMail(user.getEmail(), user.getFirstName(), otp);
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
             exception.printStackTrace();
         }
-        return savedUser;
     }
 
     @Override
-    public boolean verifyUser(UserVerification verification) {
+    public boolean verifyUser(UserVerification toVerify) {
         boolean flag = false;
-        if (userVerificationRepository
-                .findByEmail(verification.getEmail())
-                .getOtp() == verification
-                .getOtp()) {
+        UserVerification storedVerification = userVerificationRepository.findByEmail(toVerify.getEmail());
+        if (storedVerification.getOtp() == toVerify.getOtp()) {
 
-            User user = userRepository.findByEmail(verification.getEmail());
+            User user = userRepository.findByEmail(toVerify.getEmail());
             user.setStatus(1);
             updateUser(user);
+            userVerificationRepository.deleteById(storedVerification.getValidateId());
             flag = true;
         }
         return flag;
@@ -116,7 +122,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sentVerificationMail(String toEmail, String userName, int otp) {
+    public void sentVerificationMail(String toEmail, String userName, int otp)
+    throws MessagingException{
         SimpleMailMessage message = new SimpleMailMessage();
 
         String subject = "User Verification - IRCTC";
@@ -137,8 +144,8 @@ public class UserServiceImpl implements UserService {
         System.out.println("Mail Send...");
     }
 
-    @Override
-    public void triggerMail(String toEmail, String userName, int otp) throws MessagingException {
-        sentVerificationMail(toEmail, userName, otp);
-    }
+//    @Override
+//    public void triggerMail(String toEmail, String userName, int otp) throws MessagingException {
+//        sentVerificationMail(toEmail, userName, otp);
+//    }
 }

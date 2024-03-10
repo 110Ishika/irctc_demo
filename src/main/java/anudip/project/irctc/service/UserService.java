@@ -13,6 +13,8 @@ public interface UserService {
 
     User saveUser(User user);
 
+    void saveUserAndSentOtp(User user);
+
     boolean verifyUser(UserVerification verification);
 
     List<User> getAllUser();
@@ -25,8 +27,8 @@ public interface UserService {
 
     int generateOTP();
 
-    void sentVerificationMail(String toEmail, String userName, int otp);
+    void sentVerificationMail(String toEmail, String userName, int otp) throws MessagingException;
 
-    void triggerMail(String toEmail, String userName, int otp) throws MessagingException;
+    //void triggerMail(String toEmail, String userName, int otp) throws MessagingException;
 }
 

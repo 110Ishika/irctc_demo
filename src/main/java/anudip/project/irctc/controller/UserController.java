@@ -1,17 +1,22 @@
 package anudip.project.irctc.controller;
 
-import java.util.List;
-
+import anudip.project.irctc.entity.User;
 import anudip.project.irctc.entity.UserVerification;
+import anudip.project.irctc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 
-import anudip.project.irctc.entity.User;
-import anudip.project.irctc.service.UserService;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("user")
@@ -24,20 +29,22 @@ public class UserController {
     public String createUser(@ModelAttribute("user") User user) {
         int status = userService.checkUserStatus(user);
         if (status == 1)
-            return "User already registered, Try to login";
+            return "redirect:error/login";
         if (status == 2)
-            return "User already registered, Verification pending";
+            return "redirect:/verification";
 
-        userService.saveUser(user);
+        if (user.getRole().equalsIgnoreCase("user")) {
+            userService.saveUserAndSentOtp(user);
+            return "redirect:/verification?email=" + user.getEmail();
+        }
 
-        return "redirect:/verification?email=" + user.getEmail();
+        return "redirect:/admin_registration";
     }
 
     @GetMapping("/verify/{email}")
     @ResponseBody
     public String verifyUser(@PathVariable("email") String email,
                              @ModelAttribute("verification") UserVerification verification) {
-        System.out.println(email + " " + verification.getOtp());
 
         verification.setEmail(email);
 

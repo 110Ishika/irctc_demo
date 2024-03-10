@@ -3,33 +3,33 @@ package anudip.project.irctc.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "tbl_user")
 @Entity
 public class User {
 
-	
-	public User()
-	{
-		
-	}
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private int userId;
 
-    @Column(nullable = false, length = 50)
-    private String first_name;
+    @Column(name = "first_name", nullable = false, length = 50)
+    private String firstName;
 
-    @Column(nullable = false, length = 50)
-    private String last_name;
+    @Column(name = "last_name", nullable = false, length = 50)
+    private String lastName;
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;
+
+    @Column(name = "phone", nullable = false, unique = true, length = 100)
+    private String contact;
 
     @Column(nullable = false, length = 100)
     private String password;

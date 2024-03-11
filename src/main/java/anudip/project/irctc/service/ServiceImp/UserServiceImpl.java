@@ -1,12 +1,12 @@
 package anudip.project.irctc.service.ServiceImp;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
-import java.util.List;
-
+import anudip.project.irctc.entity.User;
 import anudip.project.irctc.entity.UserVerification;
+import anudip.project.irctc.model.Login;
+import anudip.project.irctc.repository.UserRepository;
 import anudip.project.irctc.repository.UserVerificationRepository;
+import anudip.project.irctc.service.UserService;
+
 import jakarta.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import anudip.project.irctc.repository.UserRepository;
-import anudip.project.irctc.entity.User;
-import anudip.project.irctc.service.UserService;
+import java.time.LocalTime;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,33 +31,23 @@ public class UserServiceImpl implements UserService {
     private UserVerificationRepository userVerificationRepository;
 
     @Override
-    public int checkUserStatus(User user) {
-        User existedUser = getUserByEmail(user.getEmail());
-
-        if (existedUser == null)
-            return 3; // user not available
-
-        if (existedUser.getStatus() == 0)
-            return 2; // already registered need to verify
-
-        return 1; // already registered need to login
-    }
-
-    @Override
     public User saveUser(User user) {
-        if(user.getUserId() != 0)
+        if (user.getUserId() != 0)
             return updateUser(user);
         return userRepository.save(user);
     }
 
     @Override
-    public void saveUserAndSentOtp(User user){
-        User existedUser = saveUser(user);
-        int otp = generateOTP();
-        userVerificationRepository.save(new UserVerification(user.getEmail(), otp, new Date()));
+    public void saveUserAndSentOtp(User user) {
+        User savedUser = saveUser(user);
+        int otp = 0;
+        if (user.getRole().equalsIgnoreCase("user")) {
+            otp = generateOTP();
+            userVerificationRepository.save(new UserVerification(user.getEmail(), otp, new Date()));
+        }
 
         try {
-            sentVerificationMail(user.getEmail(), user.getFirstName(), otp);
+            sentVerificationMail(user.getEmail(), user.getFirstName(), otp, user.getRole());
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
             exception.printStackTrace();
@@ -66,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean verifyUser(UserVerification toVerify) {
-        boolean flag = false;
+        boolean isVerified = false;
         UserVerification storedVerification = userVerificationRepository.findByEmail(toVerify.getEmail());
         if (storedVerification.getOtp() == toVerify.getOtp()) {
 
@@ -74,9 +64,9 @@ public class UserServiceImpl implements UserService {
             user.setStatus(1);
             updateUser(user);
             userVerificationRepository.deleteById(storedVerification.getValidateId());
-            flag = true;
+            isVerified = true;
         }
-        return flag;
+        return isVerified;
     }
 
     @Override
@@ -109,7 +99,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int generateOTP() {
+    public void sentVerificationMail(String toEmail, String userName, int otp, String role)
+            throws MessagingException {
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        String subject = "User Verification - IRCTC";
+
+
+        String body = getMailBody(userName, otp, role);
+
+        message.setFrom("r007.5y573m@gmail.com");
+        message.setTo(toEmail);
+        message.setText(body);
+        message.setSubject(subject);
+        mailSender.send(message);
+    }
+
+    @Override
+    public boolean userAuthentication(Login login){
+        User user = userRepository.findByEmail(login.getEmail());
+        return user.getPassword().equals(login.getPassword());
+    }
+
+    private int generateOTP() {
         String otp = "";
 
         while (otp.length() != 4) {
@@ -121,14 +133,9 @@ public class UserServiceImpl implements UserService {
         return Integer.parseInt(otp);
     }
 
-    @Override
-    public void sentVerificationMail(String toEmail, String userName, int otp)
-    throws MessagingException{
-        SimpleMailMessage message = new SimpleMailMessage();
+    private String getMailBody(String userName, int otp, String role) {
 
-        String subject = "User Verification - IRCTC";
-
-        String body = "Dear " + userName + ",\n" +
+        String forUser = "Dear " + userName + ",\n\n" +
                 "Thank you for your registration in IRCTC. \n\n" +
                 "Kindly use code: " + otp + ".\n" +
                 "For account verification\n\n" +
@@ -136,16 +143,18 @@ public class UserServiceImpl implements UserService {
                 "IRCTC(Demo)\n" +
                 "Indian Railway";
 
-        message.setFrom("r007.5y573m@gmail.com");
-        message.setTo(toEmail);
-        message.setText(body);
-        message.setSubject(subject);
-        mailSender.send(message);
-        System.out.println("Mail Send...");
-    }
+        String forAdmin = "Dear " + userName + ",\n\n" +
+                "Welcome to the IRCTC. \n\n" +
+                "Kindly send following details on the same mail for admin access verification\n" +
+                "name - \n" +
+                "address - \n" +
+                "IRCTC mail id - \n" +
+                "Employee Id - \n\n" +
 
-//    @Override
-//    public void triggerMail(String toEmail, String userName, int otp) throws MessagingException {
-//        sentVerificationMail(toEmail, userName, otp);
-//    }
+                "Thanks & Regards\n\n" +
+                "IRCTC(Demo)\n" +
+                "Indian Railway";
+
+        return role.equalsIgnoreCase("user") ? forUser : forAdmin;
+    }
 }

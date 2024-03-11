@@ -2,6 +2,7 @@ package anudip.project.irctc.controller;
 
 import anudip.project.irctc.entity.User;
 import anudip.project.irctc.entity.UserVerification;
+import anudip.project.irctc.model.Login;
 import anudip.project.irctc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+
 @Controller
 @RequestMapping("user")
 public class UserController {
@@ -27,31 +29,35 @@ public class UserController {
 
     @PostMapping("/create")
     public String createUser(@ModelAttribute("user") User user) {
-        int status = userService.checkUserStatus(user);
-        if (status == 1)
-            return "redirect:error/login";
-        if (status == 2)
-            return "redirect:/verification";
+        User existedUser = userService.getUserByEmail(user.getEmail());
 
-        if (user.getRole().equalsIgnoreCase("user")) {
+        if(existedUser != null)
+            user.setUserId(existedUser.getUserId());
+
+        if(existedUser == null || existedUser.getStatus() == 0) {
             userService.saveUserAndSentOtp(user);
-            return "redirect:/verification?email=" + user.getEmail();
+            if (user.getRole().equalsIgnoreCase("user")) {
+                return "redirect:/verification?email=" + user.getEmail();
+            }
+            return "redirect:/adminRegistration";
         }
-
-        return "redirect:/admin_registration";
+        return "redirect:/verifiedUser";
     }
 
     @GetMapping("/verify/{email}")
-    @ResponseBody
+    //@ResponseBody
     public String verifyUser(@PathVariable("email") String email,
                              @ModelAttribute("verification") UserVerification verification) {
+        boolean isVerified = false;
 
+        System.out.println(verification.getEmail());
         verification.setEmail(email);
 
         if (userService.verifyUser(verification)) {
-            return "User Registered Successfully";
+            isVerified = true;
+            return "index";
         }
-        return "Wrong Otp try again";
+        return "verification?email=" + email;
     }
 
     @GetMapping("/getAll")
@@ -72,4 +78,11 @@ public class UserController {
         return new ResponseEntity<>("user is deleted Successfully", HttpStatus.OK);
     }
 
+    @PostMapping("/login")
+    public String login(@ModelAttribute("login") Login login){
+        if(userService.userAuthentication(login)){
+            return "index";
+        }
+        return "login";
+    }
 }

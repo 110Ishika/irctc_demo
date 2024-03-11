@@ -1,6 +1,7 @@
 package anudip.project.irctc.service;
 
 import anudip.project.irctc.entity.UserVerification;
+import anudip.project.irctc.model.Login;
 import jakarta.mail.MessagingException;
 
 import java.util.List;
@@ -8,8 +9,6 @@ import java.util.List;
 import anudip.project.irctc.entity.User;
 
 public interface UserService {
-
-    int checkUserStatus(User user);
 
     User saveUser(User user);
 
@@ -25,10 +24,9 @@ public interface UserService {
 
     void deleteUser(int userId);
 
-    int generateOTP();
+    void sentVerificationMail(String toEmail, String userName, int otp, String role) throws MessagingException;
 
-    void sentVerificationMail(String toEmail, String userName, int otp) throws MessagingException;
+     boolean userAuthentication(Login login);
 
-    //void triggerMail(String toEmail, String userName, int otp) throws MessagingException;
 }
 

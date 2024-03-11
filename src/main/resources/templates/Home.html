@@ -15,14 +15,21 @@ flex-direction:row;
 
 }
 
-.header1 img
+.header1 b
 {
-margin-right:51%;
-margin-left:20px;
-margin-top:5px;
+margin-top:10px;
+margin-right:16%;
+font-size: 30px;
+margin-left:2px;
+color:Blue;
 
 }
-  .header1  a
+.header1 img
+{
+margin-left:20px;
+margin-top:5px;
+}
+.header1  a
 {
 margin-left:30px;
  padding: 12px 0px;
@@ -128,15 +135,16 @@ font-size:20px;
 <body>
 <header class="header1">
 <img th:src="@{/image/secondry-logo.png}"  height="80px" width="80px"></img>
-
+<b>WELCOME TO INDIAN RAILWAY</b>
 <a th:href="@{/registration}">Register</a>
 <a th:href="@{/login}">Login</a>
 <a>Search</a>
 <a>Book Now</a>
 <a>Contact</a>
 </header>
+
 <div class="img-back">
-<b>WELCOME TO INDIAN RAILWAY</b>
+
 </div>
 <br>
 <center><h1 style="color:lightBlue;">HOLIDAYS</h2></center>

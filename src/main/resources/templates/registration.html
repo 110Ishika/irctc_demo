@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registration Page</title>
@@ -9,15 +10,13 @@
 <style>
 /* Custom styles */
 .container {
-
 	background-color: lightBlue;
 	background-image: url("/image/vb.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
-	 height:550px;
-	 padding-top:10px;
-
+	height: 550px;
+	padding-top: 10px;
 }
 
 .form-container {
@@ -35,58 +34,48 @@
 	margin-top: 8px;
 }
 
-  .header1
-{
-color:black;
-font-size:20px;
-display:flex;
-flex-direction:row;
-
-
+.header1 {
+	color: black;
+	font-size: 20px;
+	display: flex;
+	flex-direction: row;
 }
 
-.header1 img
-{
-margin-right:48%;
-margin-left:20px;
-margin-top:5px;
-
-}
-  .header1  a
-{
-margin-left:30px;
- padding: 12px 0px;
-  text-align: center;
-text-decoration: none;
-  display: inline-block;
+.header1 img {
+	margin-right: 48%;
+	margin-left: 20px;
+	margin-top: 5px;
 }
 
-  .header1 a:hover
-{
- color: blue;
-text-decoration: underline;
+.header1 a {
+	margin-left: 30px;
+	padding: 12px 0px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+}
 
+.header1 a:hover {
+	color: blue;
+	text-decoration: underline;
 }
 
 a:active {
-  color: blue;
-}
-a:visited {
-  color: green;
+	color: blue;
 }
 
+a:visited {
+	color: green;
+}
 </style>
 </head>
 <body>
 	<header class="header1">
-<img th:src="@{/image/secondry-logo.png}"  height="80px" width="80px"></img>
-<a th:href="@{/home}">Home</a>
-<a th:href="@{/registration}">Register</a>
-<a th:href="@{/login}">Login</a>
-<a>Search</a>
-<a>Book Now</a>
-<a>Contact</a>
-</header>
+		<img th:src="@{/image/secondry-logo.png}" height="80px" width="80px"></img>
+		<a th:href="@{/home}">Home</a>
+		<a th:href="@{/login}">Login</a>
+		<a>Search</a> <a>Book Now</a> <a>Contact</a>
+	</header>
 
 	<div class="container">
 		<div class="form-container">
@@ -135,6 +124,8 @@ a:visited {
 		</div>
 	</div>
 
+
+
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
@@ -154,7 +145,7 @@ a:visited {
     });
 </script>
 
-	<script>
+<script>
     // Validate phone number format
     function validatePhoneNumber(phoneNumber) {
       // Regular expression for a 10-digit phone number

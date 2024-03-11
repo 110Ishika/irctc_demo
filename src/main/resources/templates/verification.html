@@ -27,6 +27,9 @@
 
 <div id="verificationForm">
     <h2>Enter Verification Code</h2>
+    <div th:if="${isVerified}">
+        <p><script>alert("Wrong otp try again")</script></p>
+    </div>
     <form id="verifyForm" th:action="@{/user/verify/} + ${userEmail}" th:object="${verification}" method="GET">
         <label for="verificationCode"></label><input type="text"  th:field="*{otp}" id="verificationCode"
                                                      name="verificationCode" placeholder="Enter code" required>

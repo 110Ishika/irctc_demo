@@ -6,7 +6,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.*;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,16 +28,18 @@ public class UserVerification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int validateId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
     private int otp;
 
-    public UserVerification(String email, int otp) {
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date time;
+
+    public UserVerification(String email, int otp, Date date) {
         this.email = email;
         this.otp = otp;
+        this.time = date;
     }
-
-
 }

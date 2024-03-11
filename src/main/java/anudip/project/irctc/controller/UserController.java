@@ -71,6 +71,30 @@ public class UserController {
         userService.deleteUser(userId);
         return new ResponseEntity<>("user is deleted Successfully", HttpStatus.OK);
     }
+    
+    @PostMapping("/login")
+    public String checkLoginCredential(@ModelAttribute("user") User user)
+    {
+    	User existingUser=userService.getUserByEmail(user.getEmail());
+    	if(existingUser!=null)
+    	{
+    		if(user.getPassword().equals(existingUser.getPassword()))
+    		{
+    			return "welcome";
+    		}
+    		else
+    		{
+    			return "not verified";
+    		}
+    		
+    	}
+    	else
+    	{
+    		return "user not exist! ";
+    	}
+    	
+    	
+    }
 
    
 }

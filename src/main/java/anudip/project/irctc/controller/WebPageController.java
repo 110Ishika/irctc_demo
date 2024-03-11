@@ -28,15 +28,21 @@ public class WebPageController {
         UserVerification verification = new UserVerification();
         model.addAttribute("verification", verification);
         model.addAttribute("userEmail", email);
-
         return "verification";
     }
     
  @GetMapping("/login")
-    public String logIn(){
-        return "loginIn";
+    public String logIn(Model model){
+	 model.addAttribute("user",new User());
+	 
+        return "login";
     }
  
+ @GetMapping("/home")
+ public String homePage()
+ {
+	 return "home";
+ }
 
 
 

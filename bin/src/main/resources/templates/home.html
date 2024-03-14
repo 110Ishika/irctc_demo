@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        .header1
+    {
+    color:black;
+    font-size:20px;
+    display:flex;
+    flex-direction:row;
+    }
+
+    .header1 b
+    {
+    margin-top:10px;
+    margin-right:16%;
+    font-size: 30px;
+    margin-left:2px;
+    color:Blue;
+    }
+
+    .header1 img
+    {
+    margin-left:20px;
+    margin-top:5px;
+    }
+
+    .header1  a
+    {
+    margin-left:30px;
+     padding: 12px 0px;
+      text-align: center;
+    text-decoration: none;
+      display: inline-block;
+    }
+
+      .header1 a:hover
+    {
+     color: blue;
+    text-decoration: underline;
+    }
+
+    a:active {
+      color: blue;
+    }
+
+    a:visited {
+      color: green;
+    }
+
+    .img-back
+    {
+    background-image: url(/image/train_image.jpg);
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 500px;
+        background-position: center;
+    }
+
+    .img-back b
+    {
+        margin-left: 61%;
+        font-size: 30px;
+    }
+
+    .features
+    {
+    margin-top:3%;
+    margin-left:20%;
+    margin-right:20%;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-evenly;
+    }
+
+    .features2
+    {
+    margin-top:1%;
+    margin-left:10%;
+    margin-right:20%;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-evenly;
+    width:50%;
+    }
+
+    .features div
+    {
+    display:flex;
+    margin-left:20px;
+    flex-direction:column;
+    }
+
+    .features2 div
+    {
+    display:flex;
+    margin-left:20px;
+    flex-direction:column;
+
+    }
+    .img_part
+    {
+    border:2px solid #ccc;
+    border-bottom:none;
+    padding:5px  5px;
+    }
+
+    .desc_part
+    {
+    border:2px solid #ccc;
+    border-top:none;
+    padding:15px 20px;
+    text-align:left
+    }
+
+    .desc_part b
+    {
+    font-size:20px;
+    }
+
+    </style>
+</head>
+<body>
+<header class="header1">
+    <img th:src="@{/image/secondry-logo.png}" height="80px" width="80px"></img>
+    <b>WELCOME TO INDIAN RAILWAY</b>
+    <a th:href="@{/registration}">Register</a>
+    <a th:href="@{/login}">Login</a>
+    <a>Search</a>
+    <a>Book Now</a>
+    <a>Contact</a>
+</header>
+
+<div class="img-back">
+
+</div>
+<br>
+<center><h1 style="color:lightBlue;">HOLIDAYS</h2></center>
+
+<div class="features">
+
+    <div>
+        <div class="img_part">
+            <img th:src="@{/image/exterior.jpg}" height="100%" width:"20%">
+        </div>
+        <div class="desc_part">
+            <b>Maharajas' Express</b><br>
+            Redefining Royalty, Luxury and Comfort, Maharajas' express takes you on a sojourn to the era of bygone
+            stately splendour of princely states. Sylvan furnishings, elegant ambience and modern amenities are
+            amalgamated for an “Experience Unsurpassed”. It has been a winner of “World’s Leading Luxury train” by World
+            Travel Awards consecutively for last six years.
+        </div>
+    </div>
+
+    <div>
+        <div class="img_part">
+            <img th:src="@{/image/Kashmir.jpg}" height="100%" width:"20%">
+        </div>
+        <div class="desc_part">
+            <b>International Packages</b><br>
+            Best deals in International Holiday packages, handpicked by IRCTC, for Thailand, Dubai, Sri Lanka, Hong
+            Kong, China, Macau, Bhutan, Nepal, U.K., Europe, USA, Australia etc. The packages are inclusive of
+            sightseeing, meals, visa charges and overseas medical insurance to give you a hassle-free and memorable
+            experience.
+        </div>
+    </div>
+
+
+    <div>
+        <div class="img_part">
+            <img th:src="@{/image/Thailand.jpg}" height="100%" width:"20%">
+        </div>
+        <div class="desc_part">
+            <b>Rail Tour Packages</b><br>
+            Be it the spiritual devotee seeking blessings of Tirupati, Shirdi or Mata Vaishno Devi or the leisure
+            traveller wanting to relish the Blue mountains of North East, Sand-dunes of Rajasthan, Hamlets of Ladakh,
+            Wonders of Himalayas, Serene lakes or Picturesque Islands, IRCTC has it all. Discover India through IRCTC!
+        </div>
+    </div>
+</div>
+<br>
+<div class="features2">
+
+    <div>
+        <div class="img_part">
+            <img th:src="@{/image/Bharat_Gaurav.jpg}" height="100%" width:"20%">
+        </div>
+        <div class="desc_part">
+            <b>Bharat Gaurav Tourist Train</b><br>
+            Redefining Royalty, Luxury and Comfort, Maharajas' express takes you on a sojourn to the era of bygone
+            stately splendour of princely states. Sylvan furnishings, elegant ambience and modern amenities are
+            amalgamated for an “Experience Unsurpassed”. It has been a winner of “World’s Leading Luxury train” by World
+            Travel Awards consecutively for last six years.
+        </div>
+    </div>
+
+    <div>
+        <div class="img_part">
+            <img th:src="@{/image/Manali.jpg}" height="100%" width:"20%">
+        </div>
+        <div class="desc_part">
+            <b>Rail Tour Packages</b><br>
+            Best deals in International Holiday packages, handpicked by IRCTC, for Thailand, Dubai, Sri Lanka, Hong
+            Kong, China, Macau, Bhutan, Nepal, U.K., Europe, USA, Australia etc. The packages are inclusive of
+            sightseeing, meals, visa charges and overseas medical insurance to give you a hassle-free and memorable
+            experience.
+        </div>
+    </div>
+</div>
+</body>
+</html>

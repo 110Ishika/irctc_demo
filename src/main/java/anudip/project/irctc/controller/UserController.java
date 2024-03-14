@@ -4,21 +4,22 @@ import anudip.project.irctc.entity.User;
 import anudip.project.irctc.entity.UserVerification;
 import anudip.project.irctc.model.Login;
 import anudip.project.irctc.service.UserService;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-
 
 @Controller
 @RequestMapping("user")
@@ -28,7 +29,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create")
-    public String createUser(@ModelAttribute("user") User user) {
+    public String createUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
+
+        if(result.hasErrors()) {
+            System.out.println(result);
+            return "redirect:/registration";
+        }
+
         User existedUser = userService.getUserByEmail(user.getEmail());
 
         if(existedUser != null)
@@ -76,9 +83,21 @@ public class UserController {
         userService.deleteUser(userId);
         return new ResponseEntity<>("user is deleted Successfully", HttpStatus.OK);
     }
+    
+    @GetMapping("/login")
+	public String login(Model model) {
 
+		Login login = new Login();
+		model.addAttribute("login", login);
+
+		return "login";
+	}
+    
     @PostMapping("/login")
-    public String login(@ModelAttribute("login") Login login){
+    public String login(@Valid @ModelAttribute("login") Login login, BindingResult result){
+    	if(result.hasErrors())
+    		return "login";
+    	
         if(userService.userAuthentication(login)){
             return "home";
         }

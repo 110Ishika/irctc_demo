@@ -44,13 +44,4 @@ public class WebPageController {
 	public String verifiedUser() {
 		return "verifiedUser";
 	}
-
-	@GetMapping("/login")
-	public String login(Model model) {
-
-		Login login = new Login();
-		model.addAttribute("login", login);
-
-		return "login";
-	}
 }

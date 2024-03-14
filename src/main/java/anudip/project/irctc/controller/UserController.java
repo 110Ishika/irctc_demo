@@ -30,14 +30,7 @@ public class UserController {
 
     @PostMapping("/create")
     public String createUser(@Valid  @ModelAttribute("user") User user , BindingResult result) {
-    	
-    
-//    	if(user.getFirstName().equals(""))
-//    	{
-//    		return "registration";
-//    	}
-    	
-      if(result.hasErrors())
+   if(result.hasErrors())
    	{
     	  
    		System.out.println(result);

@@ -15,7 +15,7 @@
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
-	height: 550px;
+	height: auto;
 	padding-top: 10px;
 }
 
@@ -78,16 +78,9 @@ color:red;
 <script type="text/javascript">
 
 
-
-function showError(input, errMessage){
-  const formControl = input.parentElement;
-  const small = formControl.querySelector('small');
-  small.innerHTML = errMessage;
-  input.classList.add("is-invalid");
-  event.preventDefault();
-}
 function formValidator()
 {
+	
     var firstName=document.getElementById('FirstName').value;
 	var lastName=document.getElementById('lastName').value;
 	var phone=document.getElementById('phone').value;
@@ -95,33 +88,39 @@ function formValidator()
 	var password=document.getElementById('password').value;
 	var confirmPassword=document.getElementById('confirmPassword').value;
 	var isValid=true;
-    if(!firstName)
+    if(firstName.trim()==="")
 	{
 	document.getElementsByClassName("formerror")[0].innerHTML="*This field is required";
 	  isValid=false;
 	}
     
-    if(!lastName)
+    else if(lastName.trim()==="")
 	{
-	document.getElementsByClassName("formerror")[0].innerHTML="*This field is required";
+	document.getElementsByClassName("formerror")[1].innerHTML="*This field is required";
 	  isValid=false;
 	}
-    if(!email)
+    else  if(phone.trim()==="") 
 	{
-	document.getElementsByClassName("formerror")[0].innerHTML="*This field is required";
+	document.getElementsByClassName("formerror")[2].innerHTML="*This field is required";
 	  isValid=false;
 	}
-    if(!password)
+    else  if(email.trim()==="") 
 	{
-	document.getElementsByClassName("formerror")[0].innerHTML="*This field is required";
+	document.getElementsByClassName("formerror")[3].innerHTML="*This field is required";
 	  isValid=false;
 	}
-    if(!confirmPassword)
+    else if(password.trim()==="")
 	{
-	document.getElementsByClassName("formerror")[0].innerHTML="*This field is required";
+	document.getElementsByClassName("formerror")[4].innerHTML="*This field is required";
 	  isValid=false;
 	}
-event.preventDefault();
+    else{
+    if(confirmPassword.trim()==="")
+	{
+	document.getElementsByClassName("formerror")[5].innerHTML="*This field is required";
+	  isValid=false;
+	}
+    }
 return isValid;
 }   
     
@@ -140,21 +139,19 @@ return isValid;
 		<div class="form-container">
 			<h2 class="text-center mb-4">Create IRCTC Account</h2>
 			<form  name="registrationForm"   th:action="@{/user/create}"
-				th:object="${user}" method="POST" onsubmit="return formValidator()" >
+				th:object="${user}" method="POST" onsubmit="return formValidator()">
 				<div class="form-group">
 					<input type="text" 
 					    th:field="*{firstName}" 
-					    class="form-control formerror"
+					    class="form-control"
 						placeholder="First Name"
-						th:value="${user.firstName}"
-						id= "FirstName" 
+                        id= "FirstName" 
 						th:classappend="${#fields.hasErrors('firstName') ?'is-invalid':''}"/>
-						  
+						 <b><span class="formerror"></span></b>
 						<div id="validationServer03Feedback"  class="invalid-feedback"
 						  th:each="e: ${#fields.errors('firstName')}" th:text="${e}" >
-                                         
                          </div>
-                  
+                   
 				</div>
 				<div class="form-group">
 					<input type="text" th:field="*{lastName}" class="form-control"

@@ -1,23 +1,24 @@
 package anudip.project.irctc.controller;
 
-import anudip.project.irctc.entity.User;
-import anudip.project.irctc.entity.UserVerification;
-import anudip.project.irctc.model.Login;
-import anudip.project.irctc.service.UserService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import anudip.project.irctc.entity.User;
+import anudip.project.irctc.entity.UserVerification;
+import anudip.project.irctc.model.Login;
+import anudip.project.irctc.service.UserService;
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -28,7 +29,22 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create")
-    public String createUser(@ModelAttribute("user") User user) {
+    public String createUser(@Valid  @ModelAttribute("user") User user , BindingResult result) {
+    	
+    
+//    	if(user.getFirstName().equals(""))
+//    	{
+//    		return "registration";
+//    	}
+    	
+      if(result.hasErrors())
+   	{
+    	  
+   		System.out.println(result);
+   		return "registration";
+   	}
+      
+      
         User existedUser = userService.getUserByEmail(user.getEmail());
 
         if(existedUser != null)

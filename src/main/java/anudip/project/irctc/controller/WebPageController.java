@@ -53,4 +53,18 @@ public class WebPageController {
 
 		return "login";
 	}
+	
+	@GetMapping("/searchTrain")
+	public String searchTrain()
+	{
+	return  "searchTrain";
+	}
+	
 }
+	
+
+
+
+
+	
+	

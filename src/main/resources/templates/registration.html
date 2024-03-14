@@ -67,7 +67,66 @@ a:active {
 a:visited {
 	color: green;
 }
+
+
+.formerror
+{
+color:red;
+}
 </style>
+
+<script type="text/javascript">
+
+
+
+function showError(input, errMessage){
+  const formControl = input.parentElement;
+  const small = formControl.querySelector('small');
+  small.innerHTML = errMessage;
+  input.classList.add("is-invalid");
+  event.preventDefault();
+}
+function formValidator()
+{
+    var firstName=document.getElementById('FirstName').value;
+	var lastName=document.getElementById('lastName').value;
+	var phone=document.getElementById('phone').value;
+	var email=document.getElementById('email').value;
+	var password=document.getElementById('password').value;
+	var confirmPassword=document.getElementById('confirmPassword').value;
+	var isValid=true;
+    if(!firstName)
+	{
+	document.getElementsByClassName("formerror")[0].innerHTML="*This field is required";
+	  isValid=false;
+	}
+    
+    if(!lastName)
+	{
+	document.getElementsByClassName("formerror")[0].innerHTML="*This field is required";
+	  isValid=false;
+	}
+    if(!email)
+	{
+	document.getElementsByClassName("formerror")[0].innerHTML="*This field is required";
+	  isValid=false;
+	}
+    if(!password)
+	{
+	document.getElementsByClassName("formerror")[0].innerHTML="*This field is required";
+	  isValid=false;
+	}
+    if(!confirmPassword)
+	{
+	document.getElementsByClassName("formerror")[0].innerHTML="*This field is required";
+	  isValid=false;
+	}
+event.preventDefault();
+return isValid;
+}   
+    
+
+</script>
 </head>
 <body>
 	<header class="header1">
@@ -80,43 +139,70 @@ a:visited {
 	<div class="container">
 		<div class="form-container">
 			<h2 class="text-center mb-4">Create IRCTC Account</h2>
-			<form id="registrationForm" th:action="@{/user/create}"
-				th:object="${user}" method="POST">
+			<form  name="registrationForm"   th:action="@{/user/create}"
+				th:object="${user}" method="POST" onsubmit="return formValidator()" >
 				<div class="form-group">
-					<input type="text" th:field="*{firstName}" class="form-control"
-						placeholder="First Name" id="firstName" required>
+					<input type="text" 
+					    th:field="*{firstName}" 
+					    class="form-control formerror"
+						placeholder="First Name"
+						th:value="${user.firstName}"
+						id= "FirstName" 
+						th:classappend="${#fields.hasErrors('firstName') ?'is-invalid':''}"/>
+						  
+						<div id="validationServer03Feedback"  class="invalid-feedback"
+						  th:each="e: ${#fields.errors('firstName')}" th:text="${e}" >
+                                         
+                         </div>
+                  
 				</div>
 				<div class="form-group">
 					<input type="text" th:field="*{lastName}" class="form-control"
-						placeholder="Last Name" id="lastName" required>
+						placeholder="Last Name" id="lastName"  name="lname"  th:classappend="${#fields.hasErrors('lastName') ?'is-invalid':''}"><b><span class="formerror"></span></b>
+						<div id="validationServer03Feedback"  class="invalid-feedback"  th:each="e: ${#fields.errors('lastName')}" th:text="${e}" >
+                                     </div>
 				</div>
 				<div class="form-group">
 					<input type="tel" th:field="*{contact}" class="form-control"
-						placeholder="Phone" id="phone" required>
+						placeholder="Phone" id="phone"   name="phone" th:classappend="${#fields.hasErrors('contact') ?'is-invalid':''}"> <b><span class="formerror"></span></b>
+						<div id="validationServer03Feedback"  class="invalid-feedback"  th:each="e: ${#fields.errors('contact')}" th:text="${e}" >
+                 </div>
 				</div>
 				<div class="form-group">
-					<input type="email" th:field="*{email}" class="form-control"
-						placeholder="Email" id="email" required>
-				</div>
+					<input type="text" th:field="*{email}" class="form-control"
+						placeholder="Email" id="email"   name="email" th:classappend="${#fields.hasErrors('email') ?'is-invalid':''}"> <b><span class="formerror"></span></b>
+				
+				<div id="validationServer03Feedback"  class="invalid-feedback"  th:each="e: ${#fields.errors('email')}" th:text="${e}" >
+                 </div>
+                 </div>
 				<div class="form-group">
 					<input type="password" th:field="*{password}" class="form-control"
-						placeholder="Password" id="password" required>
+						placeholder="Password" id="password"  name="password"  th:classappend="${#fields.hasErrors('password') ?'is-invalid':''}"><b><span class="formerror"></span></b>
+						<div id="validationServer03Feedback"  class="invalid-feedback"  th:each="e: ${#fields.errors('password')}" th:text="${e}" >
+                 </div>
 				</div>
 				<div class="form-group">
 					<input type="password" class="form-control"
-						placeholder="Confirm Password" id="confirmPassword" required>
+						placeholder="Confirm Password" id="confirmPassword"  name="cpassword"> <b><span class="formerror"></span></b>
 				</div>
-				<div class="form-group">
+				<div class="form-group" >
 					<label>User Type:</label><br>
 					<div class="form-check form-check-inline">
 						<input class="form-check-input" type="radio" th:field="*{role}"
-							th:value="user" name="userType" id="user" value="user" checked>
+							th:value="user" name="userType" id="user" value="user" th:classappend="${#fields.hasErrors('role') ?'is-invalid':''}">
 						<label class="form-check-label" for="user">User</label>
+						
+						<br>
+							<div id="validationServer03Feedback"  class="invalid-feedback"  th:each="e: ${#fields.errors('role')}" th:text="${e}" >
+                 </div>
 					</div>
 					<div class="form-check form-check-inline">
 						<input class="form-check-input" type="radio" th:field="*{role}"
-							th:value="admin" name="userType" id="admin" value="admin">
+							th:value="admin" name="userType" id="admin" value="admin"  th:classappend="${#fields.hasErrors('role') ?'is-invalid':''}">
 						<label class="form-check-label" for="admin">Admin</label>
+						<br>
+							<div id="validationServer03Feedback"  class="invalid-feedback"  th:each="e: ${#fields.errors('role')}" th:text="${e}" >
+                 </div>
 					</div>
 				</div>
 				<button type="submit" class="btn btn-primary btn-block">Submit</button>
@@ -125,12 +211,24 @@ a:visited {
 	</div>
 
 
-
+<!-- 
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 	<script
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
 
 	<script>
     // Validate passwords match
@@ -161,6 +259,10 @@ a:visited {
       }
     });
 </script>
+*/
+ -->
+
+
 
 </body>
 </html>

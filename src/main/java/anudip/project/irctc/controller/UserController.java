@@ -1,10 +1,6 @@
 package anudip.project.irctc.controller;
 
-import anudip.project.irctc.entity.User;
-import anudip.project.irctc.entity.UserVerification;
-import anudip.project.irctc.model.Login;
-import anudip.project.irctc.service.UserService;
-import jakarta.validation.Valid;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
+import anudip.project.irctc.entity.User;
+import anudip.project.irctc.entity.UserVerification;
+import anudip.project.irctc.model.Login;
+import anudip.project.irctc.service.UserService;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("user")
@@ -50,6 +51,8 @@ public class UserController {
         }
         return "redirect:/verifiedUser";
     }
+    
+    
 
     @GetMapping("/verify/{email}")
     public String verifyUser(@PathVariable("email") String email,

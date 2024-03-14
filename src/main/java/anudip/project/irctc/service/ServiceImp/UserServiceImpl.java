@@ -29,6 +29,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserVerificationRepository userVerificationRepository;
+	
 
 	@Override
 	public User saveUser(User user) {

@@ -17,6 +17,7 @@ public class WebPageController {
 
 	@Autowired
 	private UserService userService;
+	
 
 	@GetMapping("/registration")
 	public String registrationPage(Model model) {
@@ -39,27 +40,12 @@ public class WebPageController {
 	public String homePage() {
 		return "home";
 	}
+	
 
 	@GetMapping("/verifiedUser")
 	public String verifiedUser() {
 		return "verifiedUser";
 	}
-
-	@GetMapping("/login")
-	public String login(Model model) {
-
-		Login login = new Login();
-		model.addAttribute("login", login);
-
-		return "login";
-	}
-	
-	@GetMapping("/searchTrain")
-	public String searchTrain()
-	{
-	return  "searchTrain";
-	}
-	
 }
 	
 

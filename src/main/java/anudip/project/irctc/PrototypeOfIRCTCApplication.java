@@ -11,4 +11,3 @@ public class PrototypeOfIRCTCApplication {
         SpringApplication.run(PrototypeOfIRCTCApplication.class, args);
     }
 }
-

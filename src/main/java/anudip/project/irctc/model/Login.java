@@ -14,13 +14,13 @@ import lombok.Setter;
 @Setter
 @NotNull(message = "Login can not be null")
 public class Login {
-	
+
 	@NotBlank(message = "email should not be blank")
 	@NotNull(message = "email can not be null")
 	@Email(message = "Not a valid Email")
-    private String email;
-	
+	private String email;
+
 	@NotBlank(message = "password should not be blank")
 	@NotNull(message = "password can not be null")
-    private String password;
+	private String password;
 }

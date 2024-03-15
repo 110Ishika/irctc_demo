@@ -10,23 +10,22 @@ import anudip.project.irctc.entity.User;
 
 public interface UserService {
 
-    User saveUser(User user);
+	User saveUser(User user);
 
-    void saveUserAndSentOtp(User user);
+	void saveUserAndSentOtp(User user);
 
-    boolean verifyUser(UserVerification verification);
+	boolean verifyUser(UserVerification verification);
 
-    List<User> getAllUser();
+	List<User> getAllUser();
 
-    User getUserByEmail(String email);
+	User getUserByEmail(String email);
 
-    User updateUser(User user);
+	User updateUser(User user);
 
-    void deleteUser(int userId);
+	void deleteUser(int userId);
 
-    void sentVerificationMail(String toEmail, String userName, int otp, String role) throws MessagingException;
+	void sentVerificationMail(String toEmail, String userName, int otp, String role) throws MessagingException;
 
-    boolean userAuthentication(Login login);
+	boolean userAuthentication(Login login);
 
 }
-

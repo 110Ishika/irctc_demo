@@ -31,12 +31,11 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserVerificationRepository userVerificationRepository;
-	
 
 	@Override
 	public User saveUser(User user) {
 		user.setPassword(passwordEncryption(user.getPassword()));
-		
+
 		if (user.getUserId() != 0)
 			return updateUser(user);
 		return userRepository.save(user);
@@ -122,7 +121,7 @@ public class UserServiceImpl implements UserService {
 	public boolean userAuthentication(Login login) {
 		User user = userRepository.findByEmail(login.getEmail());
 
-		if(user == null)
+		if (user == null)
 			return false;
 
 		return checkPassword(login.getPassword(), user.getPassword());
@@ -140,26 +139,24 @@ public class UserServiceImpl implements UserService {
 
 	private String getMailBody(String userName, int otp, String role) {
 
-		String forUser = "Dear " + userName + ",\n\n" 
-		+"Thank you for your registration in IRCTC. \n\n"
-		+ "Kindly use code: " + otp + ".\n" + "For account verification\n\n" + "Thanks & Regards\n\n"
-		+ "IRCTC(Demo)\n" + "Indian Railway";
+		String forUser = "Dear " + userName + ",\n\n" + "Thank you for your registration in IRCTC. \n\n"
+				+ "Kindly use code: " + otp + ".\n" + "For account verification\n\n" + "Thanks & Regards\n\n"
+				+ "IRCTC(Demo)\n" + "Indian Railway";
 
-		String forAdmin = "Dear " + userName + ",\n\n" 
-		+ "Welcome to the IRCTC. \n\n"
-		+ "Kindly send following details on the same mail for admin access verification\n" + "name - \n"
-		+ "address - \n" + "IRCTC mail id - \n" + "Employee Id - \n\n" 
-		+ "Thanks & Regards\n\n" + "IRCTC(Demo)\n" + "Indian Railway";
+		String forAdmin = "Dear " + userName + ",\n\n" + "Welcome to the IRCTC. \n\n"
+				+ "Kindly send following details on the same mail for admin access verification\n" + "name - \n"
+				+ "address - \n" + "IRCTC mail id - \n" + "Employee Id - \n\n" + "Thanks & Regards\n\n"
+				+ "IRCTC(Demo)\n" + "Indian Railway";
 
 		return role.equalsIgnoreCase("user") ? forUser : forAdmin;
 	}
-	
+
 	private String passwordEncryption(String password) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder.encode(password);
-    }
-	
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		return bCryptPasswordEncoder.encode(password);
+	}
+
 	private boolean checkPassword(String password, String hashPassword) {
-        return BCrypt.checkpw(password, hashPassword);
-    }
+		return BCrypt.checkpw(password, hashPassword);
+	}
 }

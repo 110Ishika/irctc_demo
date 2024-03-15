@@ -14,7 +14,7 @@ public class WebPageController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@GetMapping(value = "/verification", params = "email")
 	public String verificationPage(@RequestParam("email") String email, Model model) {
 		UserVerification verification = new UserVerification();
@@ -29,17 +29,9 @@ public class WebPageController {
 	public String homePage() {
 		return "home";
 	}
-	
 
 	@GetMapping("/verifiedUser")
 	public String verifiedUser() {
 		return "verifiedUser";
 	}
 }
-	
-
-
-
-
-	
-	

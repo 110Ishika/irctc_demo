@@ -8,12 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import anudip.project.irctc.entity.User;
 import anudip.project.irctc.entity.UserVerification;
@@ -30,13 +33,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/registration")
-    public String createUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
+    public String createUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
     	
         if(result.hasErrors()) {
-        	System.out.println(result);
             return "registration";
         }
-
+        
         User existedUser = userService.getUserByEmail(user.getEmail());
 
         if(existedUser != null)
@@ -49,7 +51,8 @@ public class UserController {
             }
             return "redirect:/adminRegistration";
         }
-        return "redirect:/verifiedUser";
+        model.addAttribute("existedUser", true);
+        return "registration";
     }
     
     @GetMapping("/registration")
@@ -58,24 +61,19 @@ public class UserController {
 		model.addAttribute("user", user);
 		return "registration";
 	}
-    
-    
-    
-    
 
     @GetMapping("/verify/{email}")
     public String verifyUser(@PathVariable("email") String email,
-                             @ModelAttribute("verification") UserVerification verification) {
-        boolean isVerified = false;
-
-        System.out.println(verification.getEmail());
+                             @ModelAttribute("verification") UserVerification verification, Model model) {
+        boolean notVerified = true;
         verification.setEmail(email);
 
         if (userService.verifyUser(verification)) {
-            isVerified = true;
-            return "index";
+        	notVerified = true;
+            return "home";
         }
-        return "verification?email=" + email;
+        model.addAttribute("notVerified", notVerified);
+        return "redirect:/verification?email=" + email;
     }
 
     @GetMapping("/getAll")

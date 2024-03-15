@@ -12,6 +12,8 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -33,6 +35,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User saveUser(User user) {
+		user.setPassword(passwordEncryption(user.getPassword()));
+		
 		if (user.getUserId() != 0)
 			return updateUser(user);
 		return userRepository.save(user);
@@ -121,7 +125,7 @@ public class UserServiceImpl implements UserService {
 		if(user == null)
 			return false;
 
-		return user.getPassword().equals(login.getPassword());
+		return checkPassword(login.getPassword(), user.getPassword());
 	}
 
 	private int generateOTP() {
@@ -149,4 +153,13 @@ public class UserServiceImpl implements UserService {
 
 		return role.equalsIgnoreCase("user") ? forUser : forAdmin;
 	}
+	
+	private String passwordEncryption(String password) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        return bCryptPasswordEncoder.encode(password);
+    }
+	
+	private boolean checkPassword(String password, String hashPassword) {
+        return BCrypt.checkpw(password, hashPassword);
+    }
 }

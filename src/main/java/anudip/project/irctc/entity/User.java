@@ -41,7 +41,7 @@ public class User {
 
     
     @NotBlank(message="* phone number is required")
-    @Column(name = "phone", nullable = false, unique = true, length = 100)
+    @Column(name = "phone", nullable = false, length = 15)
     private String contact;
 
     

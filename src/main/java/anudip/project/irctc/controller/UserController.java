@@ -29,12 +29,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/create")
+    @PostMapping("/registration")
     public String createUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
-
+    	
         if(result.hasErrors()) {
-            System.out.println(result);
-            return "redirect:/registration";
+        	System.out.println(result);
+            return "registration";
         }
 
         User existedUser = userService.getUserByEmail(user.getEmail());
@@ -51,6 +51,15 @@ public class UserController {
         }
         return "redirect:/verifiedUser";
     }
+    
+    @GetMapping("/registration")
+	public String registrationPage(Model model) {
+		User user = new User();
+		model.addAttribute("user", user);
+		return "registration";
+	}
+    
+    
     
     
 

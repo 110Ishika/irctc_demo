@@ -19,13 +19,6 @@ public class WebPageController {
 	private UserService userService;
 	
 
-	@GetMapping("/registration")
-	public String registrationPage(Model model) {
-		User user = new User();
-		model.addAttribute("user", user);
-		return "registration";
-	}
-
 	@GetMapping(value = "/verification", params = "email")
 	public String verificationPage(@RequestParam("email") String email, Model model) {
 		UserVerification verification = new UserVerification();

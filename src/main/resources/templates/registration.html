@@ -16,8 +16,9 @@
 	margin-top: 4px;
 	border-radius: 10px;
 	margin-left: 140px;
-	border:2px solid black;
+	border: 2px solid black;
 }
+
 body {
 	padding-top: 70px; /* Adjust for fixed navbar height */
 }
@@ -35,6 +36,10 @@ body {
 	position: absolute;
 	top: 10px;
 	right: 10px;
+}
+
+#radio-error {
+	display: block;
 }
 </style>
 
@@ -67,33 +72,48 @@ body {
 		<div class="form-container">
 			<h2 class="text-center mb-4">Create IRCTC Account</h2>
 			<form name="registrationForm" id="registrationForm"
-				th:action="@{/user/create}" th:object="${user}" method="POST">
+				th:action="@{/user/registration}" th:object="${user}" method="POST">
 				<div class="form-group">
 
 					<input type="text" th:field="*{firstName}" class="form-control"
-						placeholder="First Name" id="firstName"> <small
-						style="color: #dc3545; font-size: 10px;"></small>
+						placeholder="First Name" id="firstName"
+						th:classappend="${#fields.hasErrors('firstName') ?'is-invalid':''}">
+					<div th:each="e : ${#fields.errors('firstName')}" th:text="${e}"
+						id="validationServer03Feedback" class="invalid-feedback"></div>
+					<small style="color: #dc3545; font-size: 10px;"></small>
 
 				</div>
 				<div class="form-group">
 					<input type="text" th:field="*{lastName}" class="form-control"
-						placeholder="Last Name" id="lastName"> <small
-						style="color: #dc3545; font-size: 10px"></small>
+						placeholder="Last Name" id="lastName"
+						th:classappend="${#fields.hasErrors('lastName') ?'is-invalid':''}">
+					<div th:each="e : ${#fields.errors('lastName')}" th:text="${e}"
+						id="validationServer03Feedback" class="invalid-feedback"></div>
+					<small style="color: #dc3545; font-size: 10px"></small>
 				</div>
 				<div class="form-group">
 					<input type="tel" th:field="*{contact}" class="form-control"
-						placeholder="Phone" id="phone"> <small
-						style="color: #dc3545; font-size: 10px;"></small>
+						placeholder="Phone" id="phone"
+						th:classappend="${#fields.hasErrors('contact') ?'is-invalid':''}">
+					<div th:each="e : ${#fields.errors('contact')}" th:text="${e}"
+						id="validationServer03Feedback" class="invalid-feedback"></div>
+					<small style="color: #dc3545; font-size: 10px;"></small>
 				</div>
 				<div class="form-group">
 					<input type="text" th:field="*{email}" class="form-control"
-						placeholder="Email" id="email"> <small
-						style="color: #dc3545; font-size: 10px;"></small>
+						placeholder="Email" id="email"
+						th:classappend="${#fields.hasErrors('email') ?'is-invalid':''}">
+					<div th:each="e : ${#fields.errors('email')}" th:text="${e}"
+						id="validationServer03Feedback" class="invalid-feedback"></div>
+					<small style="color: #dc3545; font-size: 10px;"></small>
 				</div>
 				<div class="form-group">
 					<input type="password" th:field="*{password}" class="form-control"
-						placeholder="Password" id="password"> <small
-						style="color: #dc3545; font-size: 10px;"></small>
+						placeholder="Password" id="password"
+						th:classappend="${#fields.hasErrors('password') ?'is-invalid':''}">
+					<div th:each="e : ${#fields.errors('password')}" th:text="${e}"
+						id="validationServer03Feedback" class="invalid-feedback"></div>
+					<small style="color: #dc3545; font-size: 10px;"></small>
 				</div>
 				<div class="form-group">
 					<input type="password" class="form-control"
@@ -102,25 +122,28 @@ body {
 				</div>
 				<div class="form-group">
 
-					<div class="form-check form-check-inline">
+					<div class="form-check form-check-inline"\ id="userAdminAccount">
 						<input class="form-check-input" type="radio" th:field="*{role}"
 							th:value="user" name="userType" id="user" value="user"
-							th:classappend="${#fields.hasErrors('role') ?'is-invalid':''}">
+							th:classappend="${#fields.hasErrors('role')?'is-invalid':''}">
 						<label class="form-check-label" for="user">User</label> <br>
-						<div id="validationServer03Feedback" class="invalid-feedback"
-							th:each="e: ${#fields.errors('role')}" th:text="${e}"></div>
+
 					</div>
 					<div class="form-check form-check-inline">
 						<input class="form-check-input" type="radio" th:field="*{role}"
 							th:value="admin" name="userType" id="admin" value="admin"
 							th:classappend="${#fields.hasErrors('role') ?'is-invalid':''}">
 						<label class="form-check-label" for="admin">Admin</label> <br>
-						<div id="validationServer03Feedback" class="invalid-feedback"
-							th:each="e: ${#fields.errors('role')}" th:text="${e}"></div>
 					</div>
+	
+					<div id="radio-error" class="invalid-feedback"
+						th:each="e: ${#fields.errors('role')}" th:text="${e}"></div>
+						<small
+						style="color: #dc3545; font-size: 10px;"></small>
+
 				</div>
-				<button type="submit" class="btn btn-primary btn-block" 
-				style="background-color:#E31E26">Submit</button>
+				<button type="submit" class="btn btn-primary btn-block"
+					style="background-color: #E31E26">Submit</button>
 			</form>
 		</div>
 	</div>
@@ -132,31 +155,7 @@ body {
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 	<script>
-	
-	function showError(input, errMessage){
-	    const parentElement = input.parentElement;
-	    const small = parentElement.querySelector('small');
-	    small.innerHTML = errMessage;
-	    input.classList.add("is-invalid");
-	    event.preventDefault();
-	  }
-	
-	  function removeError(input){
-		    const formControl = input.parentElement;
-		    const small = formControl.querySelector('small');
-		    small.innerHTML = "";
-		    input.classList.remove("is-invalid");
-		  }
-	  
-	  function removeAllError(firstName, lastName, phone, email, password, confirmPassword){
-		  removeError(firstName);
-		  removeError(lastName);
-		  removeError(phone);
-		  removeError(email);
-		  removeError(password);
-		  removeError(confirmPassword);
-	  }
-	
+	    
     function formFieldValidation(){
             var firstName = document.getElementById("firstName");
             var lastName = document.getElementById("lastName");
@@ -164,83 +163,92 @@ body {
             var email = document.getElementById("email");
             var password = document.getElementById("password");
             var confirmPassword = document.getElementById("confirmPassword");
-
-            var isValid = true;
+            var userAdminAccount = document.getElementById("userAdminAccount");
             
-            removeAllError(firstName, lastName, phone, email, password, confirmPassword);
+            
+            removeAllError(firstName, lastName, phone, email, password, confirmPassword, userAdminAccount);
 
             if (firstName.value.trim() === ""){
             	showError(firstName, "*First Name should not be blank");
-      	        isValid = false;
       	        }
 
             else if (lastName.value.trim() === ""){
             	showError(lastName, "*Last Name should not be blank");
-      	        isValid = false;
       	        }
             	
 
-            else if (phone.value.trim() === ""){
-            	showError(phone, "*Contact should not be blank");
-      	        isValid = false;
+            else if (phone.value.trim() === "" || !validatePhoneNumber(phone.value)){
+            	showError(phone, "*Invalid Contact");
       	        }
             	
 
-            else if (email.value.trim() === ""){
-            	showError(email, "*Email should not be blank");
-      	        isValid = false;
+            else if (email.value.trim() === "" || !validateEmail(email.value)){
+            	showError(email, "*Invalid email");
       	        }
             	
 
             else if (password.value.trim() === ""){
             	showError(password, "*password should not be blank");
-      	        isValid = false;
       	        }
             	
 
-            else{
-            	showError(confirmPassword, "*confirm password should not be blank");
-      	        isValid = false;
+            else if (!isPasswordMatch()){
+            	showError(confirmPassword, "*password and confirm password should be same");
       	        }
-            	
-
-            event.preventDefault();
-            return isValid;
+            else if (!isAccountTypeSelected()){
+            	showError(userAdminAccount, "*Kindly select Account Type");
+      	        }
     };
-
-    // Validate passwords match
-     function isPasswordMatch(){
-        if(formFieldValidation()){
-            var password = document.getElementById("password").value;
-            var confirmPassword = document.getElementById("confirmPassword").value;
-            var isValid = true;
-
-            if (password !== confirmPassword) {
-                alert("Passwords do not match");
-                event.preventDefault();
-                isValid = false;
-            }
-        }
-        return isValid;
-    };
-
-    // Validate phone number format
-    function validatePhoneNumber(phoneNumber) {
-      // Regular expression for a 10-digit phone number
-      var phonePattern = /^\d{10}$/;
-      return phonePattern.test(phoneNumber);
-    }
 
     document.getElementById("registrationForm").addEventListener("submit", function(event) {
-    	
-        if(isPasswordMatch()){
-            var phoneNumber = document.getElementById("phone").value;
-            if (!validatePhoneNumber(phoneNumber)) {
-                alert("Please enter a valid 10-digit phone number");
-                event.preventDefault();
-            }
-        }
+    	formFieldValidation();
     });
+    
+    function showError(input, errMessage){
+	    const parentElement = input.parentElement;
+	    const small = parentElement.querySelector('small');
+	    small.innerHTML = errMessage;
+	    input.classList.add("is-invalid");
+	    event.preventDefault();
+	  };
+	
+	  function removeError(input){
+		    const formControl = input.parentElement;
+		    const small = formControl.querySelector('small');
+		    small.innerHTML = "";
+		    input.classList.remove("is-invalid");
+		  };
+	  
+	  function removeAllError(firstName, lastName, phone, email, password, confirmPassword, userAdminAccount){
+		  removeError(firstName);
+		  removeError(lastName);
+		  removeError(phone);
+		  removeError(email);
+		  removeError(password);
+		  removeError(confirmPassword);
+		  removeError(userAdminAccount);
+	  };
+	  
+	  function validatePhoneNumber(phoneNumber) {
+	      var phonePattern = /^\d{10}$/;
+	      return phonePattern.test(phoneNumber);
+	    };
+	  
+	  function validateEmail(email) {
+		  var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+		  return email.match(validRegex);
+		}
+	  
+	  function isPasswordMatch(){
+		  var password = document.getElementById("password").value;
+		  var confirmPassword = document.getElementById("confirmPassword").value;
+	      return password === confirmPassword;
+	    };
+	    
+	    function isAccountTypeSelected(){
+	    	return document.getElementById("user").checked || document.getElementById("admin").checked;
+	    };
+    
 </script>
 
 </body>

@@ -105,6 +105,7 @@ public class UserController {
 			return "login";
 
 		if (userService.userAuthentication(login)) {
+			model.addAttribute("user", userService.getUserByEmail(login.getEmail()));
 			return "home";
 		}
 		model.addAttribute("incorrect", true);

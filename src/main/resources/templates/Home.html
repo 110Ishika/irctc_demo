@@ -111,9 +111,10 @@ a:visited {
 <body>
 	<header class="header1">
 		<img th:src="@{/image/secondry-logo.png}" height="80px" width="80px"></img>
-		<b>WELCOME TO INDIAN RAILWAY</b> <a th:href="@{/registration}">Register</a>
-		<a th:href="@{/login}">Login</a> <a th:href="@{/searchTrain}">Search</a>
+		<b>WELCOME TO INDIAN RAILWAY</b>
+		<a th:href="@{/searchTrain}">Search</a>
 		<a>Book Now</a> <a>Contact</a>
+		<p th:text="${user.firstName}"></p>
 	</header>
 
 	<div class="img-back"></div>

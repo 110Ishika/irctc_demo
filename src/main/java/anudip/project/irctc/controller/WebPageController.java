@@ -25,11 +25,6 @@ public class WebPageController {
 		return "verification";
 	}
 
-	@GetMapping("/home")
-	public String homePage() {
-		return "home";
-	}
-
 	@GetMapping("/verifiedUser")
 	public String verifiedUser() {
 		return "verifiedUser";

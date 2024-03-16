@@ -14,15 +14,15 @@
 
 .header1 b {
 	margin-top: 10px;
-	margin-right: 16%;
-	font-size: 30px;
+	margin-right: 42%;
+	font-size: 20px;
 	margin-left: 2px;
-	color: Blue;
+	color: rgb(0, 0, 128);
 }
 
 .header1 img {
 	margin-left: 20px;
-	margin-top: 5px;
+	margin-top: 2px;
 }
 
 .header1  a {
@@ -35,7 +35,7 @@
 
 .header1 a:hover {
 	color: blue;
-	text-decoration: underline;
+	text-decoration: none;
 }
 
 a:active {
@@ -45,19 +45,99 @@ a:active {
 a:visited {
 	color: green;
 }
+/*css for header*/
 
-.img-back {
-	background-image: url(/image/train_image.jpg);
-	background-size: cover;
+    .container {
+    background: url("/image/vb.jpg");
 	background-repeat: no-repeat;
-	height: 500px;
+	background-size: cover;
 	background-position: center;
+	height: auto;
+	padding-top:10px 10px;
+	margin-bottom:20%;
 }
 
-.img-back b {
-	margin-left: 61%;
-	font-size: 30px;
+
+.search_form
+{
+background-color:white;
+width: 40%;
+margin-left:10%;
+margin-top:5%;
+border:2px solid white;
+border-radius:2%;
+text-align:center;
+
 }
+.form_header
+{
+display:flex;
+flex-direction:coloum;
+    padding: 10px;
+
+}
+.form_header b
+{
+margin-left:50px;
+font-size:23px;
+margin-top:20px;
+
+}
+
+.img1_div
+{
+    margin-left: 5%;
+  
+}
+.img2_div
+{
+margin-left:13%;
+}
+
+.container1{
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+
+.form-group2{
+    margin-bottom: 20px;
+width:90%;
+background-color:orange;
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 60%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+
 
 .features {
 	margin-top: 3%;
@@ -110,13 +190,54 @@ a:visited {
 </head>
 <body>
 	<header class="header1">
-		<img th:src="@{/image/secondry-logo.png}" height="80px" width="80px"></img>
-		<b>WELCOME TO INDIAN RAILWAY</b> <a th:href="@{/registration}">Register</a>
-		<a th:href="@{/login}">Login</a> <a th:href="@{/searchTrain}">Search</a>
-		<a>Book Now</a> <a>Contact</a>
+		<img th:src="@{/image/secondry-logo.png}" height="70px" width="70px"></img>
+		<b>WELCOME TO INDIAN RAILWAY</b>
+		 <a th:href="@{/searchTrain}">Trains</a>
+		<a>Book Now</a> 
+		<a>Contact</a>
 	</header>
 
-	<div class="img-back"></div>
+<div class="container">
+<div class="search_form">
+<div class="form_header">
+<img th:src="@{/image/G20_logo.png}"  height="20%" width="20%"  class="img1_div">
+<b>BOOK TICKET</b>
+<img th:src="@{/image/logo_top_eng.jpg}"  height="20%" width="20%" class="img2_div">
+</div>
+
+<div class="container1">
+    <form id="irctcForm" onsubmit="validateForm()">
+
+        <div class="form-group">
+            <label for="sourceStation">Source Station:</label>
+            <input type="text"  placeholder="Enter Source"  id="sourceStation" required>
+        </div>
+
+        <div class="form-group">
+            <label for="destinationStation">Destination Station:</label>
+            <input type="text" placeholder="Enter destination" id="destinationStation" required>
+        </div>
+
+
+        <div class="form-group">
+            <label for="destinationStation">Date:</label>
+            <input type="date" id="destinationStation" required>
+        </div>
+
+        <!-- Add other form fields here -->
+
+        <div class="form-group">
+            <button type="submit">Submit</button> 
+        </div>
+
+    </form>
+</div>
+<div >
+<button type="submit" class="form-group2"> Try Search by Train Id</button>
+        </div>
+        </div>
+        </div>
+
 	<br>
 	<center>
 		<h1 style="color: lightBlue;">
@@ -125,8 +246,7 @@ a:visited {
 	</center>
 
 	<div class="features">
-
-		<div>
+     <div>
 			<div class="img_part">
 				<img th:src="@{/image/exterior.jpg}" height="100%"width:"20%">
 			</div>
@@ -202,5 +322,20 @@ a:visited {
 			</div>
 		</div>
 	</div>
+	<script>
+	function validateForm() {
+	    var sourceStation = document.getElementById("sourceStation").value;
+	    var destinationStation = document.getElementById("destinationStation").value;
+
+	    // Simple validation example, you can customize based on your needs
+	    if (sourceStation === "" || destinationStation === "") {
+	        alert("Please fill in all required fields.");
+	    } else {
+	        alert("Form submitted successfully!\nSource: " + sourceStation + "\nDestination: " + destinationStation); 
+	        // You can add code to submit the form data to the server here
+	    }
+	}
+	
+	</script>
 </body>
 </html>

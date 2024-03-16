@@ -19,7 +19,7 @@ import anudip.project.irctc.entity.User;
 import anudip.project.irctc.entity.UserVerification;
 import anudip.project.irctc.model.Login;
 import anudip.project.irctc.service.UserService;
-
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -29,13 +29,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/create")
 
-    public String createUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
-
+    @PostMapping("/registration")
+    public String createUser(@Valid @ModelAttribute("user") User user, BindingResult result,Model session) {
+    	
         if(result.hasErrors()) {
-            System.out.println(result);
-            return "redirect:/registration";
+        	System.out.println(result);
+            return "registration";
         }
         User existedUser = userService.getUserByEmail(user.getEmail());
 
@@ -49,8 +49,20 @@ public class UserController {
             }
             return "redirect:/adminRegistration";
         }
-        return "redirect:/verifiedUser";
+        System.out.println(user);
+        session.addAttribute("message", "User already exist !");
+        return "redirect:/user/registration";
+       // return "redirect:/verifiedUser";
     }
+    
+    @GetMapping("/registration")
+	public String registrationPage(Model model) {
+		User user = new User();
+		model.addAttribute("user", user);
+		return "registration";
+	}
+    
+    
     
     
     @GetMapping("/verify/{email}")

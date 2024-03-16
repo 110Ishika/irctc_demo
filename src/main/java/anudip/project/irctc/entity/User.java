@@ -1,4 +1,6 @@
 package anudip.project.irctc.entity;
+import org.hibernate.validator.constraints.UniqueElements;
+
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.Email;

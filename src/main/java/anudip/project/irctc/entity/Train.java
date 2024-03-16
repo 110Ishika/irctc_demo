@@ -1,85 +1,87 @@
 package anudip.project.irctc.entity;
-
-import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "tbl_trains1")
+
+@Table(name = "tbl_trains")
+
 @Entity
 public class Train {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	 @Column(name = "train_id")
+
+	@Column(name = "train_id")
 	private int trainId;
 	
-	@Column(name="train_name" , nullable=false , unique=true,length=50)
+	@Column(name = "train_name", length = 50, nullable = false, unique = true)
+	@NotBlank(message = "*Train name should not blank")
+	@Size(min=3, message="*At least 3 charater required")
 	private String name;
-
-	@Column(name = "source" ,nullable=false, length=50)
+	
+	@Column(length = 50, nullable = false)
+	@NotBlank(message = "*Source should not blank")
+	@Size(min=3, message="*At least 3 charater required")
 	private String source;
 	
-	 @Column(name = "destination" ,nullable=false, length=50)
+	@Column(length = 50, nullable = false)
+	@NotBlank(message = "*Destination should not blank")
+	@Size(min=3, message="*At least 3 charater required")
 	private String destination;
-
-	 @Column(name = " arrival_time" ,nullable=false, length=5)
+	
+	@Column(name = "arrival_time", length = 5, nullable = false)
+	@NotBlank(message = "*Invalid Time")
+	@Size(min=5, max = 5, message="*Invalid Time")
 	private String arrivalTime;
-	 
-	 @Column(name = "depature_time" ,nullable=false, length=5)
-		private String depatureTime;
-	 
-	 @Column(name ="seat1A_count" ,nullable=false, length=5)
-	 private int seat1ACount;
+	
+	@Column(name = "departure_time", length = 5, nullable = false)
+	@NotBlank(message = "*Invalid Time")
+	@Size(min=5, max = 5, message="*Invalid Time")
+	private String departureTime;
+	
+	@Column(name = "seat_1a_count", nullable = false, columnDefinition = "int default 0")
+	@NotBlank(message = "*Invalid Number at least fill 0")
+	private int seat1ACount;
+	
+	@Column(name = "seat_1a_price", nullable = false, columnDefinition = "decimal(6,2) default 0.0")
+	@NotBlank(message = "*Invalid Price at least fill 0")
+	private float seat1APrice;
+	
+	@Column(name = "seat_2a_count", nullable = false, columnDefinition = "int default 0")
+	@NotBlank(message = "*Invalid Number at least fill 0")
+	private int seat2ACount;
+	
+	@Column(name = "seat_2a_price", nullable = false, columnDefinition = "decimal(6,2) default 0.0")
+	@NotBlank(message = "*Invalid Price at least fill 0")
+	private float seat2APrice;
+	
+	@Column(name = "seat_sl_count", nullable = false, columnDefinition = "int default 0")
+	@NotBlank(message = "*Invalid Number at least fill 0")
+	private int seatSlCount;
+	
+	@Column(name = "seat_sl_price", nullable = false, columnDefinition = "decimal(6,2) default 0.0")
+	@NotBlank(message = "*Invalid Price at least fill 0")
+	private float seatSlPrice;
+	
+	@Column(name = "seat_gen_count", nullable = false, columnDefinition = "int default 0")
+	@NotBlank(message = "*Invalid Number at least fill 0")
+	private int seatGenCount;
+	
+	@Column(name = "seat_gen_price", nullable = false, columnDefinition = "decimal(6,2) default 0.0")
+	@NotBlank(message = "*Invalid Price at least fill 0")
+	private float seatGenPrice;
 
-	 @Column(name ="seat1A_price" ,nullable=false)
-	 private double seat1APrice;
-	 
-	 @Column(name ="seat2A_count" ,nullable=false, length=5)
-	 private int seat2ACount;
-
-	 @Column(name ="seat2A_price" ,nullable=false)
-	 private double seat2APrice;
-	 
-	 @Column(name ="seatSl_count" ,nullable=false, length=5)
-	 private int seatS1Count;
-
-	 @Column(name ="seatSl_price" ,nullable=false)
-	 private double seatS1Price;
-	 
-	 @Column(name ="seatGen_count" ,nullable=false, length=5)
-	 private int seatGenCount;
-
-	 @Column(name ="seatGen_price" ,nullable=false)
-	 private double seatGenPrice;
-	 
-	 
-	 @ManyToMany(targetEntity = Destination.class)
-	 @JoinColumn(name="destination_id")
-	  private List<Destination> destinationId;
-	 
-//	 @ManyToMany(targetEntity = Source.class)
-//	 private  List<Source> sourcesId;
-//	 
-////	 @ManyToMany(targetEntity = Destination.class)
-////		private List<Destination> destinationId;
-////		
-////
-////	 @ManyToMany(targetEntity = TrainDays.class)
-////	 @Column(name="train_day")
-////		private List<TrainDays> trainDay;
-		
-	 
 }

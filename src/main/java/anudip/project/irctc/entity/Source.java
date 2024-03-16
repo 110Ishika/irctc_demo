@@ -1,6 +1,9 @@
 package anudip.project.irctc.entity;
 
-import java.util.List;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,38 +22,31 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name="tbl_source1")
+
 @Entity
+@Table(name = "tbl_source")
+
 public class Source {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	 @Column(name = "source_id")
-	private int id;
+    @Column(name = "source_id")
+	private int sourceId;
 	
-	@Column(name="require_min" ,nullable=false, length=5)
-	private int  requireMin;
+	@ManyToOne
+	@JoinColumn(name = "train_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Train train;
 	
-	@Column(name="price" ,nullable=false)
-	private double price;
+	@ManyToOne
+	@JoinColumn(name = "station_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Station station;
 	
-	@ManyToOne(targetEntity = Train.class)
-	@JoinColumn(name="train_id")
-	private List<Train> trainId;
+	@Column(name = "required_min", nullable = false)
+	private int requiredMinutes;
 	
-	@ManyToOne(targetEntity = Stations.class)
-	@JoinColumn(name="station_id")
-	private List<Stations> stationId;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@Column(nullable = false, columnDefinition = "decimal(6,2) default 0.0")
+	private float price;
 
 }

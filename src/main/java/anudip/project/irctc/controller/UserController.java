@@ -1,7 +1,6 @@
 package anudip.project.irctc.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,91 +13,82 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import anudip.project.irctc.entity.User;
 import anudip.project.irctc.entity.UserVerification;
 import anudip.project.irctc.model.Login;
 import anudip.project.irctc.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
 
-    @PostMapping("/registration")
-    public String createUser(@Valid @ModelAttribute("user") User user, BindingResult result,Model session) {
-    	
-        if(result.hasErrors()) {
-        	System.out.println(result);
-            return "registration";
-        }
-        User existedUser = userService.getUserByEmail(user.getEmail());
+	@PostMapping("/registration")
+	public String createUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
 
-        if(existedUser != null)
-            user.setUserId(existedUser.getUserId());
+		if (result.hasErrors()) {
+			return "registration";
+		}
+       User existedUser = userService.getUserByEmail(user.getEmail());
+		if (existedUser != null)
+			user.setUserId(existedUser.getUserId());
+		if (existedUser == null || existedUser.getStatus() == 0) {
+			userService.saveUserAndSentOtp(user);
+			if (user.getRole().equalsIgnoreCase("user")) {
+				return "redirect:/verification?email=" + user.getEmail();
+			}
+			return "redirect:/adminRegistration";
+		}
+		model.addAttribute("existedUser", true);
+		return "registration";
+	}
 
-        if(existedUser == null || existedUser.getStatus() == 0) {
-            userService.saveUserAndSentOtp(user);
-            if (user.getRole().equalsIgnoreCase("user")) {
-                return "redirect:/verification?email=" + user.getEmail();
-            }
-            return "redirect:/adminRegistration";
-        }
-        System.out.println(user);
-        session.addAttribute("message", "User already exist !");
-        return "redirect:/user/registration";
-       // return "redirect:/verifiedUser";
-    }
-    
-    @GetMapping("/registration")
+	@GetMapping("/registration")
+
 	public String registrationPage(Model model) {
 		User user = new User();
 		model.addAttribute("user", user);
 		return "registration";
 	}
-    
-    
-    
-    
-    @GetMapping("/verify/{email}")
-    public String verifyUser(@PathVariable("email") String email,
-                             @ModelAttribute("verification") UserVerification verification) {
-        boolean isVerified = false;
 
-        System.out.println(verification.getEmail());
-        verification.setEmail(email);
+	@GetMapping("/verify/{email}")
+	public String verifyUser(@PathVariable("email") String email,
+			@ModelAttribute("verification") UserVerification verification, Model model) {
+		boolean notVerified = true;
+		verification.setEmail(email);
 
-        if (userService.verifyUser(verification)) {
-            isVerified = true;
-            return "index";
-        }
-        return "verification?email=" + email;
-    }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<User>> getAllUser() {
-        List<User> list = userService.getAllUser();
-        return new ResponseEntity<>(list, HttpStatus.OK);
-    }
+		if (userService.verifyUser(verification)) {
+			notVerified = true;
+			return "home";
+		}
+		model.addAttribute("notVerified", notVerified);
+		return "redirect:/verification?email=" + email;
+	}
 
-    @GetMapping("/details/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
-        User user = userService.getUserByEmail(email);
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
+	@GetMapping("/getAll")
+	public ResponseEntity<List<User>> getAllUser() {
+		List<User> list = userService.getAllUser();
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") int userId) {
-        userService.deleteUser(userId);
-        return new ResponseEntity<>("user is deleted Successfully", HttpStatus.OK);
-    }
-    
-    @GetMapping("/login")
+	@GetMapping("/details/{email}")
+	public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
+		User user = userService.getUserByEmail(email);
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+
+	@DeleteMapping("{id}")
+	public ResponseEntity<String> deleteUser(@PathVariable("id") int userId) {
+		userService.deleteUser(userId);
+		return new ResponseEntity<>("user is deleted Successfully", HttpStatus.OK);
+	}
+
+	@GetMapping("/login")
 	public String login(Model model) {
 
 		Login login = new Login();
@@ -106,15 +96,16 @@ public class UserController {
 
 		return "login";
 	}
-    
-    @PostMapping("/login")
-    public String login(@Valid @ModelAttribute("login") Login login, BindingResult result){
-    	if(result.hasErrors())
-    		return "login";
-    	
-        if(userService.userAuthentication(login)){
-            return "home";
-        }
-        return "login";
-    }
+
+	@PostMapping("/login")
+	public String login(@Valid @ModelAttribute("login") Login login, BindingResult result, Model model) {
+		if (result.hasErrors())
+			return "login";
+
+		if (userService.userAuthentication(login)) {
+			return "home";
+		}
+		model.addAttribute("incorrect", true);
+		return "login";
+	}
 }

@@ -48,8 +48,7 @@ public class UserController {
 	}
 
 	@GetMapping("/registration")
-
-	public String registrationPage(Model model) {
+  public String registrationPage(Model model) {
 		User user = new User();
 		model.addAttribute("user", user);
 		return "registration";
@@ -87,13 +86,12 @@ public class UserController {
 		userService.deleteUser(userId);
 		return new ResponseEntity<>("user is deleted Successfully", HttpStatus.OK);
 	}
+	
 
 	@GetMapping("/login")
 	public String login(Model model) {
-
 		Login login = new Login();
 		model.addAttribute("login", login);
-
 		return "login";
 	}
 

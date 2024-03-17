@@ -27,6 +27,10 @@ public class Train {
 	@Column(name = "train_id")
 	private int trainId;
 	
+	@Column(name = "train_no", unique = true, nullable = false)
+	@NotBlank(message = "*train number should not blank")
+	private int trainNo;
+	
 	@Column(name = "train_name", length = 50, nullable = false, unique = true)
 	@NotBlank(message = "*Train name should not blank")
 	@Size(min=3, message="*At least 3 charater required")

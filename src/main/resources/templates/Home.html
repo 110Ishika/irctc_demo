@@ -206,22 +206,22 @@ button:hover {
 </div>
 
 <div class="container1">
-    <form id="irctcForm" onsubmit="validateForm()">
+    <form id="irctcForm" th:action="@{/searchTrain}"  th:object="${search}" method="POST"  onsubmit="validateForm()" >
 
         <div class="form-group">
             <label for="sourceStation">Source Station:</label>
-            <input type="text"  placeholder="Enter Source"  id="sourceStation" required>
+            <input type="text"  th:field="*{source}"   placeholder="Enter Source"  id="sourceStation" required>
         </div>
 
         <div class="form-group">
             <label for="destinationStation">Destination Station:</label>
-            <input type="text" placeholder="Enter destination" id="destinationStation" required>
+            <input type="text" th:field="*{destination}"  placeholder="Enter destination" id="destinationStation" required>
         </div>
 
 
         <div class="form-group">
             <label for="destinationStation">Date:</label>
-            <input type="date" id="destinationStation" required>
+            <input type="date" th:field="*{date}"   id="destinationStation" required>
         </div>
 
         <!-- Add other form fields here -->
@@ -322,20 +322,6 @@ button:hover {
 			</div>
 		</div>
 	</div>
-	<script>
-	function validateForm() {
-	    var sourceStation = document.getElementById("sourceStation").value;
-	    var destinationStation = document.getElementById("destinationStation").value;
 
-	    // Simple validation example, you can customize based on your needs
-	    if (sourceStation === "" || destinationStation === "") {
-	        alert("Please fill in all required fields.");
-	    } else {
-	        alert("Form submitted successfully!\nSource: " + sourceStation + "\nDestination: " + destinationStation); 
-	        // You can add code to submit the form data to the server here
-	    }
-	}
-	
-	</script>
 </body>
 </html>

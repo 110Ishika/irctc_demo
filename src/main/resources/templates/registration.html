@@ -78,20 +78,11 @@ body {
 	</nav>
 
 
-
-<div th:if="${message}"  th:classappend="${is-invalid}" class="alert alert-success">
-<p th:text="${message}" class="invalid-feedback"></p>
- <!-- <th:block th:text="${#fields.removeAttribute('message')}"></th:block> - -->
-</div>
-
-
-
-
 	<div class="container">
 		<div class="form-container">
 			<h2 class="text-center mb-4" style="color:#325773">Create IRCTC Account</h2>
 			<form name="registrationForm" id="registrationForm"
-				th:action="@{/user/registration}" th:object="${user}" method="POST">
+				th:action="@{/user/registration}"  th:object="${user}" method="POST">
 				<div class="form-group">
 
 					<input type="text" th:field="*{firstName}" class="form-control"

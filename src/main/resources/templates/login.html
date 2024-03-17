@@ -16,20 +16,13 @@
 	font-size: 20px;
 	display: flex;
 	flex-direction: row;
+	background-color:#3d8bc7;
 }
+.header1 img
+{
 
-.header1 img {
-	margin-right: 63%;
-	margin-left: 20px;
-	margin-top: 5px;
-}
-
-.header1  a {
-	margin-left: 30px;
-	padding: 12px 0px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
+margin-left:60px;
+margin-top:5px;
 }
 
 .header1  a {
@@ -38,6 +31,15 @@
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
+}
+
+ .header1 span
+{
+margin-left:10px;
+margin-right:63%;
+margin-top:10px;
+color:white;
+
 }
 
 .header1 a:hover {
@@ -50,23 +52,31 @@ a:active {
 }
 
 a:visited {
-	color: green;
+	color: black;
 }
+.card
+{
+margin-top:50px;
+
+}
+
 </style>
 </head>
 <body>
-	<header class="header1">
-
-		<img th:src="@{/image/secondry-logo.png}" height="80px" width="80px"></img>
-		<a th:href="@{/home}">Home</a> <a th:href="@{/registration}">Register</a>
-		<a>Contact</a>
-	</header>
+<header class="header1">
+<img th:src="@{/image/secondry-logo.png}"  height="40px" width="50px"></img>
+<span>IRCTC</span>
+<a th:href="@{/user/home}">Home</a>
+<a th:href="@{/user/registration}">Register</a>
+<a>Contact</a>
+</header>
 	<div class="container mt-5">
 		<div class="row justify-content-center">
 			<div class="col-md-6">
 				<div class="card">
-					<div class="card-header" style="background-color: lightBlue;">
-						<h3 class="text-center">Login to IRCTC Login</h3>
+					<div class="card-header" style="background-color:lightblue">
+					
+					<h3 class="text-center">Login to IRCTC Login</h3>
 					</div>
 					<div class="card-body">
 						<form id="loginForm" th:action="@{/user/login}"
@@ -94,13 +104,15 @@ a:visited {
 								</div>
 								<small style="color: #dc3545"></small>
 							</div>
+
 							
 							<div th:if="${incorrect}">
    							<script>alert("Incorrect Credentials!!!")</script>
 							</div>
 						
 							<div class="text-center">
-								<button type="submit" class="btn btn-primary">Login</button>
+								<button type="submit" class="btn btn-primary btn-block active">Login</button>
+
 							</div>
 						</form>
 					</div>

@@ -1,7 +1,6 @@
 package anudip.project.irctc.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import anudip.project.irctc.entity.User;
 import anudip.project.irctc.entity.UserVerification;
 import anudip.project.irctc.model.Login;
@@ -28,18 +26,16 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+
 	@PostMapping("/registration")
 	public String createUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
 
 		if (result.hasErrors()) {
 			return "registration";
 		}
-
-		User existedUser = userService.getUserByEmail(user.getEmail());
-
+       User existedUser = userService.getUserByEmail(user.getEmail());
 		if (existedUser != null)
 			user.setUserId(existedUser.getUserId());
-
 		if (existedUser == null || existedUser.getStatus() == 0) {
 			userService.saveUserAndSentOtp(user);
 			if (user.getRole().equalsIgnoreCase("user")) {
@@ -52,6 +48,7 @@ public class UserController {
 	}
 
 	@GetMapping("/registration")
+
 	public String registrationPage(Model model) {
 		User user = new User();
 		model.addAttribute("user", user);
@@ -64,9 +61,9 @@ public class UserController {
 		boolean notVerified = true;
 		verification.setEmail(email);
 
+
 		if (userService.verifyUser(verification)) {
-			notVerified = true;
-			return "home";
+			return "redirect:/user/login";
 		}
 		model.addAttribute("notVerified", notVerified);
 		return "redirect:/verification?email=" + email;
@@ -106,9 +103,14 @@ public class UserController {
 
 		if (userService.userAuthentication(login)) {
 			model.addAttribute("user", userService.getUserByEmail(login.getEmail()));
-			return "home";
+			return "redirect:/user/home";
 		}
 		model.addAttribute("incorrect", true);
 		return "login";
+	}
+	
+	@GetMapping("/home")
+	public String home() {
+		return "home";
 	}
 }

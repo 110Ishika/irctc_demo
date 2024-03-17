@@ -1,7 +1,9 @@
 package anudip.project.irctc.entity;
 
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,13 +22,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+
 @Entity
 @Table(name = "tbl_source")
+
 public class Source {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "source_id")
+    @Column(name = "source_id")
 	private int sourceId;
 	
 	@ManyToOne
@@ -44,4 +48,5 @@ public class Source {
 	
 	@Column(nullable = false, columnDefinition = "decimal(6,2) default 0.0")
 	private float price;
+
 }

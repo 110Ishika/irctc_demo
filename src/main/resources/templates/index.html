@@ -9,11 +9,12 @@
     <!-- Custom CSS -->
     <style>
         body {
-            padding-top: 70px; /* Adjust for fixed navbar height */
-            margin-bottom: 90px;
+            padding-top: 70px; 
+/*margin-bottom:100px;*/
+     
         }
         .navbar {
-            background-color: #e31e26; /* IRCTC Red */
+            background-color:#3d8bc7;      /* IRCTC Red  #e31e26;  //#3d5c9b;   */
             color: white;
            
         }
@@ -26,15 +27,33 @@
             right: 10px;
         }
         footer {
-        background-color: #1a1a1a; /* IRCTC Dark Grey */
+        background-color:#3d8bc7;  /* IRCTC Dark Grey #1a1a1a; */
         color: white;
-        position: fixed;
+           /*  position:fixed;*/
         bottom: 0;
         width: 100%;
-        padding: 15px 0;
+        padding: 8px 0;
         text-align: center;
+       margin-top:60px;
     }
+    .img_container
+    {
+        text-align:center;
+        margin-top:90px;
+        
+    }
+   
     
+     .contain_welcome h1
+     {
+         margin-top:90px;
+         margin-left:150px;
+         color:#325773;
+     }
+     .contain_welcome h1 span
+     {
+         color:orange;
+     }
     </style>
 </head>
 <body>
@@ -59,10 +78,19 @@
         </div>
     </div>
 </nav>
-
+<div class="img_container">
+    
+<img th:src="@{/image/launcher.gif}"  height="15%" width="15%"><br>
+    <img th:src="@{image/namaste1.jpg}"   height="15%" width="15%">
+    
+</div>
 <!-- Page content -->
-<div class="container mt-5">
-    <h1>Welcome to IRCTC</h1>
+
+<div class="contain_welcome">
+<h1>Welcome to <span>IRCTC</span></h1>
+</div>
+<div class="container mt-4">
+    
     <p>The Indian Railway Catering and Tourism Corporation (IRCTC) is a government-owned company under the Ministry of Railways, India. Established in 1999, IRCTC plays a pivotal role in managing various services related to Indian Railways, catering to the needs of millions of passengers and tourists across the country.</p>
 
 	<p>One of IRCTC's primary functions is facilitating online ticket booking for train journeys, offering a convenient platform for passengers to book tickets, check train schedules, and manage their reservations.IRCTC has streamlined the ticketing process, enabling passengers to book tickets from the comfort of their homes or on the go.</p>

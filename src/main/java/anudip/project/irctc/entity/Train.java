@@ -1,5 +1,4 @@
 package anudip.project.irctc.entity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -21,10 +19,15 @@ import lombok.Setter;
 @Table(name = "tbl_trains")
 @Entity
 public class Train {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "train_id")
 	private int trainId;
+	
+	@Column(name = "train_no", unique = true, nullable = false)
+	@NotBlank(message = "*train number should not blank")
+	private int trainNo;
 	
 	@Column(name = "train_name", length = 50, nullable = false, unique = true)
 	@NotBlank(message = "*Train name should not blank")
@@ -82,4 +85,5 @@ public class Train {
 	@Column(name = "seat_gen_price", nullable = false, columnDefinition = "decimal(6,2) default 0.0")
 	@NotBlank(message = "*Invalid Price at least fill 0")
 	private float seatGenPrice;
+
 }

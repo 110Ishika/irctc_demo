@@ -54,6 +54,6 @@ public class User {
     @Column(nullable = false, length = 10)
     private String role;
 
-    @Column(nullable = false, columnDefinition = "default 0")
+    @Column(nullable = false, columnDefinition = "int default 0")
     private int status;
 }

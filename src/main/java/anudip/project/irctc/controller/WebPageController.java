@@ -29,4 +29,6 @@ public class WebPageController {
 	public String verifiedUser() {
 		return "verifiedUser";
 	}
+	
+	
 }

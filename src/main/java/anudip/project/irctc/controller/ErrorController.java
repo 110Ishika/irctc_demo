@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ErrorController {
+	
 	@GetMapping("adminRegistration")
 	public String alreadyRegisteredError() {
 		return "Kindly follow mail for updates";
 	}
+	
 }

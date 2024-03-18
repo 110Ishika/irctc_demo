@@ -8,6 +8,13 @@
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <style>
+
+.container-div
+{
+display:flex;
+flex-direction:space-evenly;
+
+}
 .form-container {
 	max-width: 500px;
 	margin: 0 auto;
@@ -47,6 +54,13 @@ body {
 #radio-error {
 	display: block;
 }
+
+.img_container
+{
+margin-left:210px;
+margin-top:20%;
+
+}
 </style>
 
 </head>
@@ -69,7 +83,8 @@ body {
 							<li class="nav-item"><a class="nav-link"
 								th:href="@{/user/login}">Login</a></li>
 							<li class="nav-item"><a class="nav-link"
-								th:href="@{/user/login}">Contact</a></li>
+								th:href="@{/ContactUs}">Contact</a></li>
+							
 						</ul>
 					</li>
 				</ul>
@@ -77,8 +92,8 @@ body {
 		</div>
 	</nav>
 
-
-	<div class="container">
+<div class="container-div">
+	<div class="container" style="margin-left:-20px;">
 		<div class="form-container">
 			<h2 class="text-center mb-4" style="color:#325773">Create IRCTC Account</h2>
 			<form name="registrationForm" id="registrationForm"
@@ -160,7 +175,10 @@ body {
 			</form>
 		</div>
 	</div>
-
+	<div class="img_container">
+	<img th:src="@{/image/Train.png}"  height="140px" width="280px"></img>
+	</div>
+</div>
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>

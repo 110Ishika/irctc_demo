@@ -45,11 +45,11 @@ public class TrainServiceImpl implements TrainService {
 		for (Source s : sourceList) {
 			for (Destination d : destinationList) { 
 				if (d.getTrain().getTrainId() == s.getTrain().getTrainId()) {
-					System.out.println(s.getTrain().getTrainId());
+					//System.out.println(s.getTrain().getTrainId());
 
 					if (s.getRequiredMinutes() < d.getRequiredMinutes()) {
 						trains.add(s.getTrain());
-						System.out.println(s.getTrain().getTrainId());
+						//System.out.println(s.getTrain().getTrainId());
 					}
 				}
 			} 
@@ -62,7 +62,7 @@ public class TrainServiceImpl implements TrainService {
 		Station station = stationRepository.findByStationName(source);
 		List<Source> sourceList = sourceRepository.findAllSourceByStation(station);
 		for (Source s : sourceList) {
-			System.out.println(s.getTrain().getTrainId());
+			//System.out.println(s.getTrain().getTrainId());
 
 		}
 		return sourceList;
@@ -73,7 +73,7 @@ public class TrainServiceImpl implements TrainService {
 		Station station = stationRepository.findByStationName(destination);
 		List<Destination> destinationList = destinationRepository.findAllDestinationByStation(station);
 		for (Destination d : destinationList) {
-			System.out.println(d.getTrain().getTrainId());
+			//System.out.println(d.getTrain().getTrainId());
 
 		}
 		return destinationList;

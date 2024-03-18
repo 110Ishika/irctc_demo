@@ -106,4 +106,9 @@ public class UserController {
 		model.addAttribute("incorrect", true);
 		return "login";
 	}
+	@GetMapping("/searchTrain")
+	public String search() {
+		return "searchTrain";
+	}
+
 }

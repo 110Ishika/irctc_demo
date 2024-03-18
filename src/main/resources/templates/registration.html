@@ -44,6 +44,16 @@ body {
 	right: 10px;
 }
 
+footer {
+    background-color: #3d8bc7;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
 #radio-error {
 	display: block;
 }
@@ -78,20 +88,11 @@ body {
 	</nav>
 
 
-
-<div th:if="${message}"  th:classappend="${is-invalid}" class="alert alert-success">
-<p th:text="${message}" class="invalid-feedback"></p>
- <!-- <th:block th:text="${#fields.removeAttribute('message')}"></th:block> - -->
-</div>
-
-
-
-
 	<div class="container">
 		<div class="form-container">
 			<h2 class="text-center mb-4" style="color:#325773">Create IRCTC Account</h2>
 			<form name="registrationForm" id="registrationForm"
-				th:action="@{/user/registration}" th:object="${user}" method="POST">
+				th:action="@{/user/registration}"  th:object="${user}" method="POST">
 				<div class="form-group">
 
 					<input type="text" th:field="*{firstName}" class="form-control"
@@ -169,6 +170,12 @@ body {
 			</form>
 		</div>
 	</div>
+	
+	<footer>
+		<div class="container">
+			<p>© 2024 IRCTC. All rights reserved.</p>
+		</div>
+	</footer>
 
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script

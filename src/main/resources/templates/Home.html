@@ -198,42 +198,37 @@ button:hover {
 			</div>
 
 			<div class="container1">
-				<form id="irctcForm" method="post" action="">
+				<form id="irctcForm" th:action="@{/train/searchTrain}"  th:object="${search}" method="POST">
 
 					<div class="form-group">
-						<label for="sourceStation">Source Station:</label> <input
-							type="text" placeholder="Enter Source" id="source"
-							><br>
+						<label for="sourceStation">Source Station:</label> <input type="text"  th:field="*{source}"   placeholder="Enter Source"  id="sourceStation"><br>
 							<small style="color: #dc3545; font-size: 15px;"></small>
 					</div>
 
 					<div class="form-group">
-						<label for="destinationStation">Destination Station:</label> <input
-							type="text" placeholder="Enter destination"
-							id="destination"><br>
+						<label for="destinationStation">Destination Station:</label> <input type="text" th:field="*{destination}"  placeholder="Enter destination" id="destinationStation"><br>
 							<small style="color: #dc3545; font-size: 15px;"></small>
 					</div>
 
+
 					<div class="form-group">
-						<label for="destinationStation">Date:</label> <input type="date"
-							id="travelDate"><br>
+						<label for="destinationStation">Date:</label> <input type="date" th:field="*{date}"   id="travelDate" required><br>
 							<small style="color: #dc3545; font-size: 15px;"></small>
 					</div>
 					
-
 					<div class="form-group">
 						<button type="submit">Submit</button>
 					</div>
+					</form>
 
-				</form>
-			</div>
 			<div>
 				<form th:action="@{/train/details}">
 					<button type="submit" class="form-group2">Try Search by
 						Train Id</button>
-					</form>
-			</div>
+						</div>
+					
 		</div>
+	</div>
 	</div>
 
 	<br>
@@ -323,8 +318,8 @@ button:hover {
 	<script>
 	document.getElementById("irctcForm").addEventListener("submit",
 		    function(event) {
-			var source = document.getElementById("source");
-			var destination = document.getElementById("destination");
+			var source = document.getElementById("sourceStation");
+			var destination = document.getElementById("destinationStation");
 			var dateInput = document.getElementById("travelDate");
 			
 			removeError(source);

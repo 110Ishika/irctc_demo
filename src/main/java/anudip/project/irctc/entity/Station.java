@@ -21,7 +21,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "tbl_stations")
 public class Station {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "station_id")

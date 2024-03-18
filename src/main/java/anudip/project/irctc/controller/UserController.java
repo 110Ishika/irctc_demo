@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import anudip.project.irctc.entity.User;
 import anudip.project.irctc.entity.UserVerification;
 import anudip.project.irctc.model.Login;
+import anudip.project.irctc.model.SearchInput;
 import anudip.project.irctc.service.UserService;
 import jakarta.validation.Valid;
 
@@ -48,8 +49,7 @@ public class UserController {
 	}
 
 	@GetMapping("/registration")
-
-	public String registrationPage(Model model) {
+  public String registrationPage(Model model) {
 		User user = new User();
 		model.addAttribute("user", user);
 		return "registration";
@@ -86,13 +86,12 @@ public class UserController {
 		userService.deleteUser(userId);
 		return new ResponseEntity<>("user is deleted Successfully", HttpStatus.OK);
 	}
+	
 
 	@GetMapping("/login")
 	public String login(Model model) {
-
 		Login login = new Login();
 		model.addAttribute("login", login);
-
 		return "login";
 	}
 
@@ -110,7 +109,9 @@ public class UserController {
 	}
 	
 	@GetMapping("/home")
-	public String home() {
+	public String homePage(Model model) {
+		SearchInput input = new SearchInput();
+		model.addAttribute("search",input);
 		return "home";
 	}
 }

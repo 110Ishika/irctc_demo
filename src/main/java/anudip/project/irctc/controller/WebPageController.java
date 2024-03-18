@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import anudip.project.irctc.entity.UserVerification;
+import anudip.project.irctc.model.SearchInput;
 import anudip.project.irctc.service.UserService;
 
 @Controller
@@ -24,6 +25,16 @@ public class WebPageController {
 		model.addAttribute("userEmail", email);
 		return "verification";
 	}
+	
+	@GetMapping(value = "/verification")
+	public String verificationPageBlank(Model model) {
+		UserVerification verification = new UserVerification();
+		String email = "";
+		model.addAttribute("verification", verification);
+		model.addAttribute("userEmail", email);
+		return "verification";
+	}
+
 
 	@GetMapping("/verifiedUser")
 	public String verifiedUser() {

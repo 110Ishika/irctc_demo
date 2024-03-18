@@ -65,9 +65,11 @@ a:visited {
 	font-size: 16px;
 	outline: none;
 }
+
 small {
 	padding-right: 170px;
 }
+
 .search-button {
 	padding: 10px 20px;
 	background-color: #4CAF50;
@@ -104,10 +106,19 @@ th {
 	color: white;
 }
 
-.is-invalid{
-	border: 1px solid red;
+footer {
+    background-color: #3498db;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
+.is-invalid {
+	border: 1px solid red;
+}
 </style>
 </head>
 <body>
@@ -122,8 +133,9 @@ th {
 			<input type="text" class="search-input" name="id" id="trainNo"
 				placeholder="Enter train number">
 			<button type="submit" class="search-button">Search</button>
-			<br>
-			<small style="color: #dc3545"></small>
+			<br> <small style="color: #dc3545"></small>
+			<p style="color: #dc3545"
+				th:text="${incorrect} ? 'No Train found! Please enter a valid train no.' : ''"></p>
 		</form>
 	</div>
 
@@ -147,7 +159,7 @@ th {
 			</tr>
 		</tbody>
 	</table>
-	
+
 	<table border="1">
 		<thead>
 			<tr>
@@ -159,15 +171,22 @@ th {
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="train : ${train}">
-				<td th:text="${train.trainNo}"></td>
-				<td th:text="${train.name}"></td>
-				<td th:text="${train.source}"></td>
-				<td th:text="${train.destination}"></td>
-				<td th:text="${schedule}"></td>
+			<tr th:each="route : ${route}">
+				<td th:text="${route.sNo}"></td>
+				<td th:text="${route.stationCode}"></td>
+				<td th:text="${route.stationName}"></td>
+				<td th:text="${route.arrivalTime}"></td>
+				<td th:text="${route.departureTime}"></td>
 			</tr>
 		</tbody>
 	</table>
+
+
+	<footer>
+		<div class="container">
+			<p>© 2024 IRCTC. All rights reserved.</p>
+		</div>
+	</footer>
 
 	<script>
 		document.getElementById("searchTrain").addEventListener(

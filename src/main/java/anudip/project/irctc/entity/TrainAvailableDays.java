@@ -39,4 +39,6 @@ public class TrainAvailableDays {
 	
 	@Column(nullable = false)
 	private int day;
+
+	
 }

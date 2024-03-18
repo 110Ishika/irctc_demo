@@ -48,16 +48,26 @@ color:white;
 }
 
 a:active {
-	color: blue;
+	color: white;
 }
 
 a:visited {
-	color: black;
+	color: white;
 }
 .card
 {
 margin-top:50px;
 
+}
+
+footer {
+    background-color: #3d8bc7;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 </style>
@@ -68,13 +78,12 @@ margin-top:50px;
 <span>IRCTC</span>
 <a th:href="@{/user/home}">Home</a>
 <a th:href="@{/user/registration}">Register</a>
-<a>Contact</a>
 </header>
 	<div class="container mt-5">
 		<div class="row justify-content-center">
 			<div class="col-md-6">
 				<div class="card">
-					<div class="card-header" style="background-color:lightblue">
+					<div class="card-header" style="background-color: #3d8bc7">
 					
 					<h3 class="text-center">Login to IRCTC Login</h3>
 					</div>
@@ -120,7 +129,13 @@ margin-top:50px;
 			</div>
 		</div>
 	</div>
-
+	
+	<footer>
+		<div class="container">
+			<p>© 2024 IRCTC. All rights reserved.</p>
+		</div>
+	</footer>
+	
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
 		

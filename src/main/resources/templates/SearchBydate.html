@@ -163,14 +163,16 @@ margin-left:-60px;
 	</div>
 	
 	<!--  Available  Train details --> 
-	<div th:each="trainList, i : ${ListOfTrain} "> 
-	<br>
+	<div th:each="trainList, i : ${ListOfTrain} ">
+	<form th:action="@{/Booking} + ${trainList.trainId}" method="Get">
+	
+	 <br>
 	<div>
 	<div class="train_details"> 
 	<div class="details_part">
 	<br>
    <section class="train_info">
-   <H5 th:text="${trainList.trainId}"></H5> 
+   <H5 th:text="${trainList.trainId}" ></H5> 
    <p><b> Runs On:</b> <span th:text="${scheduleList.get(i.index)}" ></span></p> 	
    </section>
   
@@ -196,14 +198,14 @@ margin-left:-60px;
 	</div>
 	<div class="Book_part">
 
-	<button>BOOK NOW</button>
+	<button type="submit">BOOK NOW</button>
 	
 	</div>
-	
-	
+    </div>
 	</div>
-	</div>
+	</form>
 </div>
+
 	
 	<footer class="bg-dark text-white py-4" style="margin-top:80px;">
     <div class="container">

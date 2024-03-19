@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+<title>Booking Page</title>
+<style>
+.header1 {
+	color: black;
+	font-size: 20px;
+	display: flex;
+	flex-direction: row;
+	background-color:lightblue;
+}
+
+.header1 b {
+	margin-top: 10px;
+	margin-right: 42%;
+	font-size: 20px;
+	margin-left: 2px;
+	color: rgb(0, 0, 128);
+}
+
+.header1 img {
+	margin-left: 20px;
+	margin-top: 2px;
+}
+
+.header1  a {
+	margin-left: 30px;
+	padding: 12px 0px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.header1 a:hover {
+	color: blue;
+	text-decoration: none;
+}
+
+a:active {
+	color: blue;
+}
+
+a:visited {
+	color: green;
+}
+</style>
+<body>
+<header class="header1">
+		<img th:src="@{/image/secondry-logo.png}" height="70px" width="70px"></img>
+		<b>WELCOME TO INDIAN RAILWAY</b> <a th:href="@{/searchTrain}">Trains</a>
+		<a>Book Now</a> <a th:href="@{/ContactUs}">Contact</a>
+	</header>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="text-center">Ticket Booking Form</h3>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter your name">
+              </div>
+              <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter your email">
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number">
+              </div>
+              <div class="form-group">
+                <label for="tickets">Number of Tickets:</label>
+                <input type="number" class="form-control" id="tickets" min="1" placeholder="Enter the number of tickets">
+              </div>
+              <div class="form-group">
+                <label for="event">Event:</label>
+                <select class="form-control" id="event">
+                  <option>Select an event</option>
+                  <option>Concert</option>
+                  <option>Movie</option>
+                  <option>Sporting Event</option>
+                </select>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Book Tickets</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

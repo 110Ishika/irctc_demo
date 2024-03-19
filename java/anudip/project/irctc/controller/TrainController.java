@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import anudip.project.irctc.entity.NewTrain;
@@ -22,7 +23,7 @@ public class TrainController {
 	TrainService trainService;
 
 	@PostMapping("/searchBydate")
-	public String searchTrain(@ModelAttribute("search") SearchInput search, Model trainModel, Model dayModel)
+	public String searchTrain(@ModelAttribute("search") SearchInput search, Model trainModel, Model dayModel,Model trainName)
 	{
 		System.out.println(search.getSource()+ search.getDestination()+search.getDate());
 		List<Train> trainList =trainService.findAllTrain(search.getSource(),search.getDestination());
@@ -47,18 +48,16 @@ public class TrainController {
 		
 	    trainModel.addAttribute("ListOfTrain",trainList1);
 		dayModel.addAttribute("scheduleList", scheduleList);
-
+		String train=new String();
+	    trainName.addAttribute("train",train);
 		return "SearchBydate";
 	}
 	
 	
-	
-	
-	@GetMapping("/searchBydate")
-	public String searchByDate()
-	{
-		
-		return "SearchBydate";
+	@GetMapping("/Booking/{trainName}")
+	public String bookTicket(@PathVariable("trainName") String trainName)
+	{ 
+	return "Booking" + trainName;
 	}
 
 }

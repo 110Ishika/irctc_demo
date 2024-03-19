@@ -20,6 +20,8 @@ public interface TrainService {
 	
 	String getTrainScheduleList(Train train);
 	
+	List<String> getTrainScheduleList(List<Train> train);
+	
 	List<Route> getTrainRoute(Train train);
 
 }

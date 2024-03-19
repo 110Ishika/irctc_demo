@@ -1,19 +1,15 @@
 package anudip.project.irctc.service.ServiceImp;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import anudip.project.irctc.entity.Booking;
 import anudip.project.irctc.entity.Destination;
 import anudip.project.irctc.entity.Source;
 import anudip.project.irctc.entity.Station;
@@ -26,7 +22,6 @@ import anudip.project.irctc.repository.SourceRepository;
 import anudip.project.irctc.repository.StationRepository;
 import anudip.project.irctc.repository.TrainAvailableRepository;
 import anudip.project.irctc.repository.TrainRepository;
-import anudip.project.irctc.repository.UserRepository;
 import anudip.project.irctc.service.TrainService;
 
 @Service
@@ -77,6 +72,16 @@ public class TrainServiceImpl implements TrainService {
 	}
 	
 	@Override
+	public List<String> getTrainScheduleList(List<Train> trainList) {
+		List<String> scheduleLis = new ArrayList<>();
+		
+		for(Train train : trainList)
+			scheduleLis.add(getTrainScheduleList(train));
+		
+		return scheduleLis;
+	}
+	
+	@Override
 	public List<Train> getAllTrains(String source, String destination, LocalDate date){
 		
 		List<Train> bySourceDestinationList = filterTrainBySourceAndDestination(source, destination);
@@ -113,6 +118,7 @@ public class TrainServiceImpl implements TrainService {
 						s.getTrain().setDepartureTime(changeTime(s.getTrain().getDepartureTime(), d.getRequiredMinutes()));
 						
 						trains.add(s.getTrain());
+
 					}
 				}
 			}
@@ -145,6 +151,7 @@ public class TrainServiceImpl implements TrainService {
 	public List<Source> getTrainBySource(String source) {
 		Station station = stationRepository.findByStationName(source);
 		List<Source> sourceList = sourceRepository.findAllByStation(station);
+
 		return sourceList;
 	}
 
@@ -152,6 +159,7 @@ public class TrainServiceImpl implements TrainService {
 	public List<Destination> getTrainByDestination(String destination) {
 		Station station = stationRepository.findByStationName(destination);
 		List<Destination> destinationList = destinationRepository.findAllByStation(station);
+
 		return destinationList;
 	}
 

@@ -107,6 +107,7 @@ public class UserController {
 		model.addAttribute("incorrect", true);
 		return "login";
 	}
+
 	
 	@GetMapping("/home")
 	public String homePage(Model model) {
@@ -114,4 +115,11 @@ public class UserController {
 		model.addAttribute("search",input);
 		return "home";
 	}
+
+	@GetMapping("/searchTrain")
+	public String search() {
+		return "searchTrain";
+	}
+
+
 }

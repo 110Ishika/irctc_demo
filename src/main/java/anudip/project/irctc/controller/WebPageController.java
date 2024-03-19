@@ -41,5 +41,11 @@ public class WebPageController {
 		return "verifiedUser";
 	}
 	
-	
+
+	@GetMapping("/ContactUs")
+	public String searchByDate()
+	{
+		return "contactUs";
+	}
+
 }

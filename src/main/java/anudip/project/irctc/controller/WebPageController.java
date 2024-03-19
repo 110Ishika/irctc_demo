@@ -35,21 +35,17 @@ public class WebPageController {
 		return "verification";
 	}
 
-	@GetMapping("/home")
-	public String homePage(Model model) {
-		SearchInput input =new SearchInput();
-		model.addAttribute("search",input);
-		return "home";
-	}
 
 	@GetMapping("/verifiedUser")
 	public String verifiedUser() {
 		return "verifiedUser";
 	}
 	
+
 	@GetMapping("/ContactUs")
 	public String searchByDate()
 	{
 		return "contactUs";
 	}
+
 }

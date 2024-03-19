@@ -37,7 +37,7 @@ body {
 }
 
 .navbar {
-	background-color:#3d8bc7; /* IRCTC Red */
+	background-color:#3d8bc7;
 	color: white;
 }
 
@@ -49,6 +49,16 @@ body {
 	position: absolute;
 	top: 10px;
 	right: 10px;
+}
+
+footer {
+    background-color: #3d8bc7;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 #radio-error {
@@ -175,10 +185,19 @@ margin-top:20%;
 			</form>
 		</div>
 	</div>
+
 	<div class="img_container">
 	<img th:src="@{/image/Train.png}"  height="140px" width="280px"></img>
 	</div>
 </div>
+
+	
+	<footer>
+		<div class="container">
+			<p>© 2024 IRCTC. All rights reserved.</p>
+		</div>
+	</footer>
+
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>

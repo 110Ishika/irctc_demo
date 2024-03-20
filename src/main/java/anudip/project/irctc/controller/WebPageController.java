@@ -25,7 +25,7 @@ public class WebPageController {
 		model.addAttribute("userEmail", email);
 		return "verification";
 	}
-	
+
 	@GetMapping(value = "/verification")
 	public String verificationPageBlank(Model model) {
 		UserVerification verification = new UserVerification();
@@ -35,17 +35,19 @@ public class WebPageController {
 		return "verification";
 	}
 
-
 	@GetMapping("/verifiedUser")
 	public String verifiedUser() {
 		return "verifiedUser";
 	}
-	
 
 	@GetMapping("/ContactUs")
-	public String searchByDate()
-	{
+	public String searchByDate() {
 		return "contactUs";
+	}
+
+	@GetMapping("adminRegistration")
+	public String alreadyRegisteredError() {
+		return "Kindly follow mail for updates";
 	}
 
 }

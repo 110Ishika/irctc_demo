@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.antlr.v4.runtime.atn.AtomTransition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -117,6 +118,10 @@ public class TrainServiceImpl implements TrainService {
 						s.getTrain().setArrivalTime(changeTime(s.getTrain().getDepartureTime(), s.getRequiredMinutes()));
 						s.getTrain().setDepartureTime(changeTime(s.getTrain().getDepartureTime(), d.getRequiredMinutes()));
 						
+						s.getTrain().setSeat1APrice(setPrice((int)d.getPrice(),"AC 1"));
+						s.getTrain().setSeat2APrice(setPrice((int)d.getPrice(),"AC 2"));
+						s.getTrain().setSeatSlPrice(setPrice((int)d.getPrice(),"SLP"));
+						s.getTrain().setSeatGenPrice(d.getPrice());
 						trains.add(s.getTrain());
 
 					}
@@ -126,6 +131,15 @@ public class TrainServiceImpl implements TrainService {
 		return trains;
 	}
 	
+	private int setPrice(int price, String seatType) {
+		if(seatType.equalsIgnoreCase("AC 1"))
+			return price * 6;
+		if(seatType.equalsIgnoreCase("AC 2"))
+			return price * 4;
+		if(seatType.equalsIgnoreCase("SLP"))
+			return price * 2;
+		return price;
+	}
 	private List<Train> filterTrainByDay(List<Train> trains, LocalDate date){
 		int day = date.getDayOfWeek().getValue();
 		List<Train> trainList = new ArrayList<>();

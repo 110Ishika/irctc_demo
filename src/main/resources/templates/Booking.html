@@ -12,7 +12,7 @@
 	font-size: 20px;
 	display: flex;
 	flex-direction: row;
-	background-color:lightblue;
+	background-color:#eef1f3;
 }
 
 .header1 b {
@@ -48,6 +48,44 @@ a:active {
 a:visited {
 	color: green;
 }
+.card-header, .btn
+{
+background-color:orange;
+}
+.form-group
+{
+display:flex;
+flex-direction:row;
+justify-content:space-between;
+}
+
+.form-group lebel
+{
+margin-left:0px;
+width:60px;
+}
+.form-group input
+{
+
+width:70%;
+}
+.card-body
+{
+width:auto;
+}
+
+.form-check-label
+{
+margin-left:20px;
+}
+.form-margin
+{
+margin-right:40%;
+}
+.form-control
+{
+width:350px;
+}
 </style>
 <body>
 <header class="header1">
@@ -55,7 +93,7 @@ a:visited {
 		<b>WELCOME TO INDIAN RAILWAY</b> <a th:href="@{/searchTrain}">Trains</a>
 		<a>Book Now</a> <a th:href="@{/ContactUs}">Contact</a>
 	</header>
-<body>
+<br>
   <div class="container">
     <div class="row">
       <div class="col-md-6 offset-md-3">
@@ -64,34 +102,75 @@ a:visited {
             <h3 class="text-center">Ticket Booking Form</h3>
           </div>
           <div class="card-body">
-            <form>
+            <form th:action="@{/train/userBookingInfo}" th:object="${userTicket}" method="POST">
               <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                <label for="name">First Name:</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter your First name"  th:field="*{firstName}">
               </div>
               <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                <label for="email">Last Name:</label>
+                <input type="email" class="form-control" id="email"  placeholder="Enter your last name" th:field="*{lastName}">
+              </div>
+              <div class="form-group" >
+            <label>Gender:</label>
+        <div class="form-group form-margin">   
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="gender" id="male" value="male"  th:field="*{gender}">
+        <label class="form-check-label" for="male">
+          Male
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="gender" id="female" value="female" th:field="*{gender}">
+        <label class="form-check-label" for="female">
+          Female
+        </label>
+      </div>
+    </div>
+    </div>
+               <div class="form-group">
+                <label for="Age">Age:</label>
+                <input type="text" class="form-control" id="Age" placeholder="Enter your Age" value="" th:field="*{age}">
               </div>
               <div class="form-group">
                 <label for="phone">Phone:</label>
                 <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number">
               </div>
-              <div class="form-group">
-                <label for="tickets">Number of Tickets:</label>
-                <input type="number" class="form-control" id="tickets" min="1" placeholder="Enter the number of tickets">
+               <div class="form-group">
+                <label for="Adhar">Aadhaar Number</label>
+                <input type="text" class="form-control" id="Adhar" placeholder="Enter your Adhar number"  th:field="*{aadhaar}">
               </div>
+             
+               <div class="form-group">
+                <label for="pnr">PNR Number:</label>
+                <input type="text" class="form-control" id="pnr" placeholder="Enter your PNR number" th:field="*{pnr}">
+              </div>
+
               <div class="form-group">
-                <label for="event">Event:</label>
-                <select class="form-control" id="event">
-                  <option>Select an event</option>
-                  <option>Concert</option>
-                  <option>Movie</option>
-                  <option>Sporting Event</option>
+                <label for="seat">Select Seat Type:</label>
+                <select class="form-control" id="seat" onchange="getSeatType()" th:field="*{seatType}">
+                  <option value="-1">Select Seat</option>
+                  <option value="AC 1">AC 1</option>
+                  <option value="AC 2">AC 2</option>
+                  <option value="GEN">GEN</option>
+                  <option value="SLP">SLP</option>
                 </select>
               </div>
+               <div class="form-group">
+                <label for="tickets">Select tickets: </label>
+                <input type="number" class="form-control" id="tickets" min="1" placeholder="Enter the number of tickets"  onchange="getNumberOfTickets()">
+              </div>
+             
+                <div class="form-group">
+                <label for="price">Price:  </label>
+                <input type="text" class="form-control" id="price" value="" th:field="*{price}">
+              </div>
+               <div class="form-group">
+                <label for="date">Booking Date:</label>
+                <input type="text" class="form-control" id="date" value="  23-6-2024" >
+              </div>
               <div class="text-center">
-                <button type="submit" class="btn btn-primary">Book Tickets</button>
+                <button type="submit" class="btn">Book Tickets</button>
               </div>
             </form>
           </div>
@@ -100,6 +179,64 @@ a:visited {
     </div>
   </div>
 
+<script>
+function  getSeatType()
+{
+	const seatValue=document.getElementById("seat");
+	const selectedSeat=seatValue.value;
+	var setPrice;
+	
+	if(selectedSeat=="AC 1")
+		{
+		
+		setPrice=30;
+		alert("inside Ac1 :"+ setPrice);
+		
+		}
+	else if(selectedSeat=="AC 2")
+	{
+	setPrice=50;
+	}
+	else if(selectedSeat=="GEN")
+	{
+	setPrice=10;
+	}
+	else if(selectedSeat=="SLP")
+	{
+	setPrice=20;
+	}
+	//alert("selected Seat: "+selectedSeat);
+	 getNumberOfTickets(setPrice);
+	
+	}
+	
+	function getNumberOfTickets(setPrice)
+	{
+		 
+		var quantity=document.getElementById("tickets");
+		var selectedQuantity= parseInt(quantity.value);
+		
+		if(selectedQuantity>0){
+		alert("selectedQuantity -> getNumberOfTickets: " + selectedQuantity);
+		//alert("Type of" + typeof selectedQuantity);
+	   alert("setPrice -> getNumberOfTickets: " + setPrice);
+
+		
+		 var price = parseInt(setPrice * selectedQuantity);
+		 alert(" price of inside Ac1  getNumberOfTickets: " + parseInt(price));
+		 showPrice(price);
+		}
+		
+		
+	}
+	function showPrice(price)
+	{
+		var priceLocation=document.getElementById("price");
+		priceLocation.value=parseInt(price.value);
+		
+	}
+	
+</script>
   <!-- Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

@@ -93,4 +93,34 @@ public class Booking {
 	
 	@Column(length = 20, nullable = false)
 	private String status;
+
+	public Booking(User user,
+			@NotBlank(message = "*First name should not blank") @Size(min = 3, message = "*At least 3 characters") String firstName,
+			@NotBlank(message = "*Last name should not blank") @Size(min = 3, message = "*At least 3 characters") String lastName,
+			Train train,
+			@NotBlank(message = "*Source should not blank") @Size(min = 3, message = "*At least 3 characters") String source,
+			@NotBlank(message = "*Destination should not blank") @Size(min = 3, message = "*At least 3 characters") String destination,
+			float price, LocalDate travelDate, int age, @NotBlank(message = "*must be selected") String gender,
+			String pnr,
+			@NotBlank(message = "*aadhaar should not blank") @Size(min = 16, max = 16, message = "*Must be of 16 digits") String aadhaar,
+			@NotBlank(message = "*Please select Seat Type") String seatType, String seatNo, String status) {
+		super();
+		this.user = user;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.train = train;
+		this.source = source;
+		this.destination = destination;
+		this.price = price;
+		this.travelDate = travelDate;
+		this.age = age;
+		this.gender = gender;
+		this.pnr = pnr;
+		this.aadhaar = aadhaar;
+		this.seatType = seatType;
+		this.seatNo = seatNo;
+		this.status = status;
+	}
+	
+	
 }

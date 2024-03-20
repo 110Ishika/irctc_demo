@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService {
 		int otp = 0;
 		if (user.getRole().equalsIgnoreCase("user")) {
 			otp = generateOTP();
+			userVerificationRepository.deleteAllByEmail(user.getEmail());
 			userVerificationRepository.save(new UserVerification(user.getEmail(), otp, new Date()));
 		}
 

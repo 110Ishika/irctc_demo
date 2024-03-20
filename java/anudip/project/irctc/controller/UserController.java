@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import anudip.project.irctc.entity.User;
 import anudip.project.irctc.entity.UserVerification;
 import anudip.project.irctc.model.Login;
+import anudip.project.irctc.model.SearchInput;
 import anudip.project.irctc.service.UserService;
 import jakarta.validation.Valid;
 
@@ -62,8 +63,7 @@ public class UserController {
 
 
 		if (userService.verifyUser(verification)) {
-			notVerified = true;
-			return "home";
+			return "redirect:/user/login";
 		}
 		model.addAttribute("notVerified", notVerified);
 		return "redirect:/verification?email=" + email;
@@ -101,14 +101,25 @@ public class UserController {
 			return "login";
 
 		if (userService.userAuthentication(login)) {
-			return "home";
+			model.addAttribute("user", userService.getUserByEmail(login.getEmail()));
+			return "redirect:/user/home";
 		}
 		model.addAttribute("incorrect", true);
 		return "login";
 	}
+
+	
+	@GetMapping("/home")
+	public String homePage(Model model) {
+		SearchInput input = new SearchInput();
+		model.addAttribute("search",input);
+		return "home";
+	}
+
 	@GetMapping("/searchTrain")
 	public String search() {
 		return "searchTrain";
 	}
+
 
 }

@@ -1,7 +1,6 @@
 package anudip.project.irctc.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import anudip.project.irctc.entity.NewTrain;
 import anudip.project.irctc.entity.Train;
 import anudip.project.irctc.model.Route;
 import anudip.project.irctc.model.SearchInput;
 import anudip.project.irctc.service.TrainService;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("train")
@@ -27,8 +26,12 @@ public class TrainController {
 	private TrainService trainService;
 
 	@GetMapping(value = "/details", params = "id")
-	public String getTrainDetails(@RequestParam("id") String trainNo, Model model) {
-
+	public String getTrainDetails(@RequestParam("id") String trainNo, Model model,
+			HttpSession httpSession) {
+		
+		if(httpSession.getAttribute("email") == null)
+			return "redirect:/user/login";
+		
 		Train train = trainService.getTrainByTrainNo(Integer.parseInt(trainNo));
 		List<Route> route = new ArrayList<>();
 		String trainShedule = "";
@@ -47,8 +50,12 @@ public class TrainController {
 	}
 
 	@PostMapping("/searchBydate")
-	public String searchTrain(@ModelAttribute("search") SearchInput search, Model trainModel, Model dayModel) {
-
+	public String searchTrain(@ModelAttribute("search") SearchInput search, Model trainModel,
+			Model dayModel, HttpSession httpSession) {
+		
+		if(httpSession.getAttribute("email") == null)
+			return "redirect:/user/login";
+		
 		List<Train> trainList = trainService.getAllTrains(search.getSource(), search.getDestination(),
 				search.getDate());
 		List<String> scheduleList = trainService.getTrainScheduleList(trainList);
@@ -60,13 +67,20 @@ public class TrainController {
 	}
 
 	@GetMapping("/details")
-	public String trainDetails() {
+	public String trainDetails(HttpSession httpSession) {
+		
+		if(httpSession.getAttribute("email") == null)
+			return "redirect:/user/login";
+		
 		return "traindetails";
 	}
 
 	@GetMapping("/searchBydate")
-	public String searchByDate() {
-
+	public String searchByDate(HttpSession httpSession) {
+		
+		if(httpSession.getAttribute("email") == null)
+			return "redirect:/user/login";
+		
 		return "SearchBydate";
 	}
 

@@ -121,8 +121,9 @@ a:visited {
 <body>
 	<header class="header1">
 		<img th:src="@{/image/secondry-logo.png}" height="70px" width="70px"></img>
-		<b>WELCOME TO TRAIN GALLARY</b> <a th:href="@{/searchTrain}">Trains</a>
-		<a>Book Now</a> <a th:href="@{/ContactUs}">Contact</a>
+		<b>WELCOME TO TRAIN GALLARY</b> <a th:href="@{/user/home}">Search Trains</a>
+		<a th:href="@{/ContactUs}">Contact</a>
+		<a th:href="@{/user/logout}">Logout</a>
 	</header>
 
 	<div class="galary">

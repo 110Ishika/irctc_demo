@@ -71,6 +71,35 @@ public class TrainController {
 
 		return "SearchBydate";
 	}
+	////
+	@GetMapping(value = "/Booking", params = { "src", "dst", "train", "date" })
+	public String bookTicket(@RequestParam("src") String source, @RequestParam("dst") String destination,
+			@RequestParam("train") String trainNo, @RequestParam("date") LocalDate date, Model model,HttpSession httpSession) {
+		System.out.println(source);
+		
+		if (httpSession.getAttribute("email") == null)
+			return "redirect:/user/login";
+
+
+		User user = userService.getUserByEmail((String)httpSession.getAttribute("email"));
+		
+		Booking bookingInfo = new Booking();
+		bookingInfo.setSource(source);
+		bookingInfo.setDestination(destination);
+		bookingInfo.setTravelDate(date);
+		bookingInfo.setUser(user);
+        Train train= trainService.getTrainByTrainNo(Integer.parseInt(trainNo));
+        bookingInfo.setTrain(train);
+       
+		model.addAttribute("userTicket", bookingInfo);
+		model.addAttribute("train",train);
+		
+        System.out.println("train is here now ");
+		System.out.println(date instanceof LocalDate);
+		return "booking";
+
+	}
+	////
 
 	@GetMapping("/details")
 	public String trainDetails(HttpSession httpSession) {
@@ -116,6 +145,17 @@ public class TrainController {
 		System.out.println(pnr);
 		System.out.println(date.getDayOfWeek());
 		return "redirect:/train/tickets";
+	}
+	
+	@PostMapping(value = "/userBookingInfo/")
+	public String bookingInfo(@ModelAttribute("userTicket") Booking booking, HttpSession httpSession) {
+		if (httpSession.getAttribute("email") == null)
+			return "redirect:/user/login";
+
+		System.out.println("welcome");
+		boolean status = trainService.bookTicket(booking);
+		System.out.println("booking confirmed");
+		return "getTicket";
 	}
 
 }

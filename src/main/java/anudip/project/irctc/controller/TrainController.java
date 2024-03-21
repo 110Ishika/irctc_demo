@@ -1,23 +1,29 @@
 package anudip.project.irctc.controller;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import anudip.project.irctc.entity.Booking;
+import anudip.project.irctc.entity.Station;
+
 import anudip.project.irctc.entity.Train;
 import anudip.project.irctc.entity.User;
 import anudip.project.irctc.model.Route;
 import anudip.project.irctc.model.SearchInput;
+import anudip.project.irctc.repository.TrainRepository;
 import anudip.project.irctc.service.TrainService;
 import anudip.project.irctc.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -28,6 +34,11 @@ public class TrainController {
 
 	@Autowired
 	private TrainService trainService;
+	
+	@Autowired
+	private UserService userService;
+	
+	
 
 	@Autowired
 	private UserService userService;
@@ -55,8 +66,9 @@ public class TrainController {
 		return "traindetails";
 	}
 
-	@PostMapping("/searchBydate")
-	public String searchTrain(@ModelAttribute("search") SearchInput search, Model trainModel, Model dayModel,
+
+	@PostMapping(value = "/searchBydate/{email}")
+	public String searchTrain(@PathVariable String email, @ModelAttribute("search") SearchInput search, Model model,
 			HttpSession httpSession) {
 
 		if (httpSession.getAttribute("email") == null)
@@ -66,20 +78,52 @@ public class TrainController {
 				search.getDate());
 		List<String> scheduleList = trainService.getTrainScheduleList(trainList);
 
-		trainModel.addAttribute("ListOfTrain", trainList);
-		dayModel.addAttribute("scheduleList", scheduleList);
-
+		model.addAttribute("ListOfTrain", trainList);
+		model.addAttribute("scheduleList", scheduleList);
+		model.addAttribute("searchDate", search.getDate());
+		model.addAttribute("email", email);
 		return "SearchBydate";
+
+		// return "redirect:/train/searchBydate?date="+search.getDate();
 	}
+
 
 	@GetMapping("/details")
 	public String trainDetails(HttpSession httpSession) {
 
 		if (httpSession.getAttribute("email") == null)
 			return "redirect:/user/login";
+  return "traindetails";
+}
 
-		return "traindetails";
+	@GetMapping(value = "/Booking", params = { "src", "dst", "train", "date" })
+	public String bookTicket(@RequestParam("src") String source, @RequestParam("dst") String destination,
+			@RequestParam("train") String trainNo, @RequestParam("date") LocalDate date, Model model,HttpSession httpSession) {
+		System.out.println(source);
+		
+		if (httpSession.getAttribute("email") == null)
+			return "redirect:/user/login";
+
+
+		User user = userService.getUserByEmail((String)httpSession.getAttribute("email"));
+		
+		Booking bookingInfo = new Booking();
+		bookingInfo.setSource(source);
+		bookingInfo.setDestination(destination);
+		bookingInfo.setTravelDate(date);
+		bookingInfo.setUser(user);
+        Train train= trainService.getTrainByTrainNo(Integer.parseInt(trainNo));
+        bookingInfo.setTrain(train);
+       
+		model.addAttribute("userTicket", bookingInfo);
+		model.addAttribute("train",train);
+		
+        System.out.println("train is here now ");
+		System.out.println(date instanceof LocalDate);
+		return "booking";
+
 	}
+
 
 	@GetMapping("/searchBydate")
 	public String searchByDate(HttpSession httpSession) {
@@ -90,8 +134,10 @@ public class TrainController {
 		return "SearchBydate";
 	}
 
+
 	@GetMapping("/tickets")
 	public String ticketManagement(Model model, HttpSession httpSession) {
+  
 		if (httpSession.getAttribute("email") == null)
 			return "redirect:/user/login";
 
@@ -105,17 +151,16 @@ public class TrainController {
 			System.out.println(n);
 		return "tickets";
 	}
-
-	@GetMapping(value = "/tickets", params = { "pnr", "date" })
-	public String cancleTicket(@RequestParam("pnr") String pnr, @RequestParam("date") LocalDate date,
-			HttpSession httpSession) {
-
+    
+	@PostMapping(value = "/userBookingInfo/")
+	public String bookingInfo(@ModelAttribute("userTicket") Booking booking, HttpSession httpSession) {
 		if (httpSession.getAttribute("email") == null)
 			return "redirect:/user/login";
 
-		System.out.println(pnr);
-		System.out.println(date.getDayOfWeek());
-		return "redirect:/train/tickets";
+		System.out.println("welcome");
+		boolean status = trainService.bookTicket(booking);
+		System.out.println("booking confirmed");
+		return "getTicket";
 	}
 
 }

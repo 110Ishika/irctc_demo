@@ -66,26 +66,8 @@ public class UserController {
 		model.addAttribute("notVerified", notVerified);
 		return "redirect:/verification?email=" + email;
 	}
-
-//	@GetMapping("/getAll")
-//	public ResponseEntity<List<User>> getAllUser() {
-//		List<User> list = userService.getAllUser();
-//		return new ResponseEntity<>(list, HttpStatus.OK);
-//	}
-//
-//	@GetMapping("/details/{email}")
-//	public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
-//		User user = userService.getUserByEmail(email);
-//		return new ResponseEntity<>(user, HttpStatus.OK);
-//	}
-
-//	@DeleteMapping("{id}")
-//	public ResponseEntity<String> deleteUser(@PathVariable("id") int userId) {
-//		userService.deleteUser(userId);
-//		return new ResponseEntity<>("user is deleted Successfully", HttpStatus.OK);
-//	}
 	
-
+	
 	@GetMapping("/login")
 	public String login(Model model, HttpSession httpSession) {
 		
@@ -106,7 +88,7 @@ public class UserController {
 			httpSession.setAttribute("email", login.getEmail());
 			httpSession.setMaxInactiveInterval(60*30);
 			model.addAttribute("user", userService.getUserByEmail(login.getEmail()));
-			return "redirect:/user/home";
+			return "redirect:/user/home" ;
 		}
 		model.addAttribute("incorrect", true);
 		return "login";
@@ -118,6 +100,7 @@ public class UserController {
 		
 		if(httpSession.getAttribute("email") == null)
 			return "redirect:/user/login";
+		
 		
 		SearchInput input = new SearchInput();
 		model.addAttribute("search",input);

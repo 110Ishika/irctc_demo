@@ -11,11 +11,13 @@ import org.antlr.v4.runtime.atn.AtomTransition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import anudip.project.irctc.entity.Booking;
 import anudip.project.irctc.entity.Destination;
 import anudip.project.irctc.entity.Source;
 import anudip.project.irctc.entity.Station;
 import anudip.project.irctc.entity.Train;
 import anudip.project.irctc.entity.TrainAvailableDays;
+import anudip.project.irctc.entity.User;
 import anudip.project.irctc.model.Route;
 import anudip.project.irctc.repository.BookingRepository;
 import anudip.project.irctc.repository.DestinationRepository;
@@ -131,6 +133,23 @@ public class TrainServiceImpl implements TrainService {
 		return trains;
 	}
 	
+	public List<Integer> getPriceBySourceDestinationAndTrain(String source, String destination, Train train){
+		Source from = sourceRepository.findByStationAndTrain(stationRepository.findByStationName(source),train);
+		Destination to = destinationRepository.findByStationAndTrain(stationRepository.findByStationName(destination),train);
+		System.out.println(to.getPrice());
+		System.out.println(from.getPrice());
+		int price = (int)(to.getPrice() - from.getPrice());
+		
+		List<Integer> priceList = new ArrayList<>();
+		
+		priceList.add(setPrice(price, "AC 1"));
+		priceList.add(setPrice(price, "AC 2"));
+		priceList.add(setPrice(price, "SLP"));
+		priceList.add(setPrice(price, "GEN"));
+		
+		return priceList;
+	}
+	
 	private int setPrice(int price, String seatType) {
 		if(seatType.equalsIgnoreCase("AC 1"))
 			return price * 6;
@@ -219,5 +238,16 @@ public class TrainServiceImpl implements TrainService {
 		hourMinute[0] = String.valueOf((Integer.parseInt(hourMinute[0]) + hour) % 24);
 		hourMinute[1] += hourMinute[1].length()==1 ? "0" : "";
 		return hourMinute[0] + ":" + hourMinute[1];
+	}
+
+	@Override
+	public List<Booking> getAllBookingByUser(User user) { 
+		return bookingRepository.findAllByUser(user);
+	}
+	
+	private String generatePnr() {
+		int pnr = 181286;
+		Integer id = bookingRepository.findMaxBookingId();
+		return "PNR"+(pnr + id);
 	}
 }

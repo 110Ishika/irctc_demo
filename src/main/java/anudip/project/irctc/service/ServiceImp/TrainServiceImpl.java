@@ -137,6 +137,23 @@ public class TrainServiceImpl implements TrainService {
 		return trains;
 	}
 	
+	public List<Integer> getPriceBySourceDestinationAndTrain(String source, String destination, Train train){
+		Source from = sourceRepository.findByStationAndTrain(stationRepository.findByStationName(source),train);
+		Destination to = destinationRepository.findByStationAndTrain(stationRepository.findByStationName(destination),train);
+		System.out.println(to.getPrice());
+		System.out.println(from.getPrice());
+		int price = (int)(to.getPrice() - from.getPrice());
+		
+		List<Integer> priceList = new ArrayList<>();
+		
+		priceList.add(setPrice(price, "AC 1"));
+		priceList.add(setPrice(price, "AC 2"));
+		priceList.add(setPrice(price, "SLP"));
+		priceList.add(setPrice(price, "GEN"));
+		
+		return priceList;
+	}
+	
 	private int setPrice(int price, String seatType) {
 		if(seatType.equalsIgnoreCase("AC 1"))
 			return price * 6;
@@ -229,6 +246,11 @@ public class TrainServiceImpl implements TrainService {
 	}
 
 	@Override
+	public List<Booking> getAllBookingByUser(User user) { 
+		return bookingRepository.findAllByUser(user);
+	}
+	
+
 	public boolean bookTicket(Booking booking) {
 		System.out.println("Inside Book Ticket");
 		   Station sourceStation= findStationBySource(booking.getSource());
@@ -249,21 +271,19 @@ public class TrainServiceImpl implements TrainService {
       //   System.out.println(trainNum);
 }
 
-
 	private String generatePnr() {
 		int pnr = 181286;
 		Integer id = bookingRepository.findMaxBookingId();
 		return "PNR"+(pnr + id);
 	}
 	
-	public Station  findStationBySource(String source)
-	{
+	public Station  findStationBySource(String source) {
 		Station station=stationRepository.findByStationName(source);
 		
 		return station;
 	}
-	public Station  findStationByDestination(String destination)
-	{
+  
+	public Station  findStationByDestination(String destination){
 		Station station=stationRepository.findByStationName(destination);
 		
 		return station;

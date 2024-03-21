@@ -104,18 +104,8 @@ public class UserController {
 		
 		SearchInput input = new SearchInput();
 		model.addAttribute("search",input);
-		model.addAttribute("email",httpSession.getAttribute("email"));
-		System.out.println(httpSession.getAttribute("email"));
 		
 		return "home";
-	}
-
-	@GetMapping("/searchTrain")
-	public String search(HttpSession httpSession) {
-		if(httpSession.getAttribute("email") == null)
-			return "redirect:/user/login";
-		
-		return "searchTrain";
 	}
 	
 	@GetMapping("/logout")

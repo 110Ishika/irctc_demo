@@ -93,5 +93,4 @@ public class Booking {
 	
 	@Column(length = 20, nullable = false)
 	private String status;
-	
 }

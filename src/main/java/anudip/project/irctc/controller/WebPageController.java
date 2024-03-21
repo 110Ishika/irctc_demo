@@ -11,6 +11,9 @@ import anudip.project.irctc.entity.UserVerification;
 public class WebPageController {
 
 
+	@Autowired
+	private UserService userService;
+	
 	@GetMapping(value = "/verification", params = "email")
 	public String verificationPage(@RequestParam("email") String email, Model model) {
 		UserVerification verification = new UserVerification();
@@ -29,12 +32,7 @@ public class WebPageController {
 		model.addAttribute("userEmail", email);
 		return "verification";
 	}
-
-	@GetMapping("/verifiedUser")
-	public String verifiedUser() {
-		return "verifiedUser";
-	}
-
+	
 	@GetMapping("/ContactUs")
 	public String searchByDate() {
 		return "contactUs";

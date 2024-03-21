@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import anudip.project.irctc.entity.Booking;
 import anudip.project.irctc.entity.Station;
+
 import anudip.project.irctc.entity.Train;
 import anudip.project.irctc.entity.User;
 import anudip.project.irctc.model.Route;
@@ -38,6 +39,9 @@ public class TrainController {
 	private UserService userService;
 	
 	
+
+	@Autowired
+	private UserService userService;
 
 	@GetMapping(value = "/details", params = "id")
 	public String getTrainDetails(@RequestParam("id") String trainNo, Model model, HttpSession httpSession) {
@@ -62,6 +66,7 @@ public class TrainController {
 		return "traindetails";
 	}
 
+
 	@PostMapping(value = "/searchBydate/{email}")
 	public String searchTrain(@PathVariable String email, @ModelAttribute("search") SearchInput search, Model model,
 			HttpSession httpSession) {
@@ -81,6 +86,15 @@ public class TrainController {
 
 		// return "redirect:/train/searchBydate?date="+search.getDate();
 	}
+
+
+	@GetMapping("/details")
+	public String trainDetails(HttpSession httpSession) {
+
+		if (httpSession.getAttribute("email") == null)
+			return "redirect:/user/login";
+  return "traindetails";
+}
 
 	@GetMapping(value = "/Booking", params = { "src", "dst", "train", "date" })
 	public String bookTicket(@RequestParam("src") String source, @RequestParam("dst") String destination,
@@ -110,14 +124,6 @@ public class TrainController {
 
 	}
 
-	@GetMapping("/details")
-	public String trainDetails(HttpSession httpSession) {
-
-		if (httpSession.getAttribute("email") == null)
-			return "redirect:/user/login";
-
-		return "traindetails";
-	}
 
 	@GetMapping("/searchBydate")
 	public String searchByDate(HttpSession httpSession) {
@@ -128,6 +134,24 @@ public class TrainController {
 		return "SearchBydate";
 	}
 
+
+	@GetMapping("/tickets")
+	public String ticketManagement(Model model, HttpSession httpSession) {
+  
+		if (httpSession.getAttribute("email") == null)
+			return "redirect:/user/login";
+
+		User user = userService.getUserByEmail((String) httpSession.getAttribute("email"));
+		List<Booking> bookingListByUser = trainService.getAllBookingByUser(user);
+		Booking booking = new Booking();
+		model.addAttribute("bookingList", bookingListByUser);
+		model.addAttribute("selectedTicket", booking);
+		List<Integer> pric = trainService.getPriceBySourceDestinationAndTrain("Muri", "Hatia", trainService.getTrainByTrainNo(18615));
+		for(int n :pric)
+			System.out.println(n);
+		return "tickets";
+	}
+    
 	@PostMapping(value = "/userBookingInfo/")
 	public String bookingInfo(@ModelAttribute("userTicket") Booking booking, HttpSession httpSession) {
 		if (httpSession.getAttribute("email") == null)

@@ -15,4 +15,5 @@ public interface SourceRepository extends JpaRepository<Source, Integer> {
 	List<Source> findAllByTrain(Train train);
 	Source findSourceByStationAndTrain(Train train,Station station);
 	
+	Source findByStationAndTrain(Station station, Train train);
 }

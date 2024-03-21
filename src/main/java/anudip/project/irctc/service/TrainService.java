@@ -6,6 +6,7 @@ import java.util.List;
 import anudip.project.irctc.entity.Booking;
 import anudip.project.irctc.entity.Destination;
 import anudip.project.irctc.entity.Source;
+import anudip.project.irctc.entity.Station;
 import anudip.project.irctc.entity.Train;
 import anudip.project.irctc.entity.User;
 import anudip.project.irctc.model.Route;
@@ -30,4 +31,9 @@ public interface TrainService {
 	
 	List<Integer> getPriceBySourceDestinationAndTrain(String source, String destination, Train train);
 
+	boolean bookTicket(Booking booking);
+
+	Station  findStationBySource(String source);
+	
+	Station  findStationByDestination(String destination);
 }

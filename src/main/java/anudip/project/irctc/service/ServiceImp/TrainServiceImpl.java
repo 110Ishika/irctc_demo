@@ -25,6 +25,7 @@ import anudip.project.irctc.repository.SourceRepository;
 import anudip.project.irctc.repository.StationRepository;
 import anudip.project.irctc.repository.TrainAvailableRepository;
 import anudip.project.irctc.repository.TrainRepository;
+import anudip.project.irctc.repository.UserRepository;
 import anudip.project.irctc.service.TrainService;
 
 @Service
@@ -47,6 +48,9 @@ public class TrainServiceImpl implements TrainService {
 	
 	@Autowired
 	private BookingRepository bookingRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	public Train getTrainByTrainNo(int trainNo) {
@@ -159,6 +163,7 @@ public class TrainServiceImpl implements TrainService {
 			return price * 2;
 		return price;
 	}
+	
 	private List<Train> filterTrainByDay(List<Train> trains, LocalDate date){
 		int day = date.getDayOfWeek().getValue();
 		List<Train> trainList = new ArrayList<>();
@@ -245,9 +250,42 @@ public class TrainServiceImpl implements TrainService {
 		return bookingRepository.findAllByUser(user);
 	}
 	
+
+	public boolean bookTicket(Booking booking) {
+		System.out.println("Inside Book Ticket");
+		   Station sourceStation= findStationBySource(booking.getSource());
+	        int stationId=sourceStation.getStationId();
+	        System.out.println(stationId);
+	        Station stationDes=findStationByDestination(booking.getDestination());
+	        int destinationId=stationDes.getStationId();
+	        System.out.println(destinationId);
+    Source source= sourceRepository.findSourceByStationAndTrain(booking.getTrain(),sourceStation);
+	        
+	        System.out.println("got source object");
+          booking.setPnr(generatePnr());
+          booking.setSeatNo("46");
+                   
+          return false;
+
+         
+      //   System.out.println(trainNum);
+}
+
 	private String generatePnr() {
 		int pnr = 181286;
 		Integer id = bookingRepository.findMaxBookingId();
 		return "PNR"+(pnr + id);
+	}
+	
+	public Station  findStationBySource(String source) {
+		Station station=stationRepository.findByStationName(source);
+		
+		return station;
+	}
+  
+	public Station  findStationByDestination(String destination){
+		Station station=stationRepository.findByStationName(destination);
+		
+		return station;
 	}
 }

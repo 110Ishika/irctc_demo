@@ -24,16 +24,17 @@
       }
 
       .header1 img {
-        margin-left: 20px;
+        margin-left: 10px;
         margin-top: 2px;
       }
 
       .header1 a {
-        margin-left: 30px;
+        margin-left: 20px;
         padding: 12px 0px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
+        color: balck;
       }
 
       .header1 a:hover {
@@ -42,12 +43,10 @@
       }
 
       a:active {
-        color: blue;
+        color: black;
       }
 
-      a:visited {
-        color: green;
-      }
+      
 
       .container5 {
         background: url("/image/vb.jpg");
@@ -139,8 +138,8 @@
 
       .features {
         margin-top: 3%;
-        margin-left: 20%;
-        margin-right: 20%;
+        margin-left: 10%;
+        margin-right: 15%;
         display: flex;
         flex-direction: row;
         justify-content: space-evenly;
@@ -310,15 +309,23 @@
         margin-top: 15px;
         background-color: #3d8bc7;
       }
+      .testclass{
+      position: absolute;
+	  top: 10px;
+	  right: 10px;
+      }
     </style>
   </head>
   <body>
     <header class="header1">
       <img th:src="@{/image/secondry-logo.png}" height="70px" width="70px"></img>
-      <b>WELCOME TO INDIAN RAILWAY</b>
-      <a th:href="@{/searchTrain}">Trains</a>
-      <a>Book Now</a>
-      <a th:href="@{/ContactUs}">Contact</a>
+      <a th:href="@{/}"> <b>WELCOME TO INDIAN RAILWAY</b></a>
+      <div class = "testclass">
+      
+      <a th:href= "@{/searchTrain}">My Tickets</a>
+      <a th:href= "@{/ContactUs}">Contact Us</a>
+      <a th:href= "@{/user/logout}" >Logout</a>
+      </div>
     </header>
     <div class="container5">
       <div class="search_form">
@@ -328,7 +335,8 @@
           <img th:src="@{/image/logo_top_eng.jpg}" height="20%" width="20%" class="img2_div">
         </div>
         <div class="container1">
-          <form id="irctcForm" th:action="@{/train/searchBydate}" th:object="${search}" method="POST">
+          <form id="irctcForm" th:action="@{/train/searchBydate/} + ${email}" th:object="${search}" method="POST">
+        
             <div class="form-group">
               <label for="sourceStation">Source Station:</label>
               <input type="text" th:field="*{source}" placeholder="Enter Source" id="sourceStation">

@@ -7,14 +7,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.antlr.v4.runtime.atn.AtomTransition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import anudip.project.irctc.entity.Booking;
 import anudip.project.irctc.entity.Destination;
 import anudip.project.irctc.entity.Source;
 import anudip.project.irctc.entity.Station;
 import anudip.project.irctc.entity.Train;
 import anudip.project.irctc.entity.TrainAvailableDays;
+import anudip.project.irctc.entity.User;
 import anudip.project.irctc.model.Route;
 import anudip.project.irctc.repository.BookingRepository;
 import anudip.project.irctc.repository.DestinationRepository;
@@ -22,6 +25,7 @@ import anudip.project.irctc.repository.SourceRepository;
 import anudip.project.irctc.repository.StationRepository;
 import anudip.project.irctc.repository.TrainAvailableRepository;
 import anudip.project.irctc.repository.TrainRepository;
+import anudip.project.irctc.repository.UserRepository;
 import anudip.project.irctc.service.TrainService;
 
 @Service
@@ -44,6 +48,9 @@ public class TrainServiceImpl implements TrainService {
 	
 	@Autowired
 	private BookingRepository bookingRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	public Train getTrainByTrainNo(int trainNo) {
@@ -117,6 +124,10 @@ public class TrainServiceImpl implements TrainService {
 						s.getTrain().setArrivalTime(changeTime(s.getTrain().getDepartureTime(), s.getRequiredMinutes()));
 						s.getTrain().setDepartureTime(changeTime(s.getTrain().getDepartureTime(), d.getRequiredMinutes()));
 						
+						s.getTrain().setSeat1APrice(setPrice((int)d.getPrice(),"AC 1"));
+						s.getTrain().setSeat2APrice(setPrice((int)d.getPrice(),"AC 2"));
+						s.getTrain().setSeatSlPrice(setPrice((int)d.getPrice(),"SLP"));
+						s.getTrain().setSeatGenPrice(d.getPrice());
 						trains.add(s.getTrain());
 
 					}
@@ -124,6 +135,16 @@ public class TrainServiceImpl implements TrainService {
 			}
 		}
 		return trains;
+	}
+	
+	private int setPrice(int price, String seatType) {
+		if(seatType.equalsIgnoreCase("AC 1"))
+			return price * 6;
+		if(seatType.equalsIgnoreCase("AC 2"))
+			return price * 4;
+		if(seatType.equalsIgnoreCase("SLP"))
+			return price * 2;
+		return price;
 	}
 	
 	private List<Train> filterTrainByDay(List<Train> trains, LocalDate date){
@@ -205,5 +226,46 @@ public class TrainServiceImpl implements TrainService {
 		hourMinute[0] = String.valueOf((Integer.parseInt(hourMinute[0]) + hour) % 24);
 		hourMinute[1] += hourMinute[1].length()==1 ? "0" : "";
 		return hourMinute[0] + ":" + hourMinute[1];
+	}
+
+	@Override
+	public boolean bookTicket(Booking booking) {
+		System.out.println("Inside Book Ticket");
+		   Station sourceStation= findStationBySource(booking.getSource());
+	        int stationId=sourceStation.getStationId();
+	        System.out.println(stationId);
+	        Station stationDes=findStationByDestination(booking.getDestination());
+	        int destinationId=stationDes.getStationId();
+	        System.out.println(destinationId);
+    Source source= sourceRepository.findSourceByStationAndTrain(booking.getTrain(),sourceStation);
+	        
+	        System.out.println("got source object");
+          booking.setPnr(generatePnr());
+          booking.setSeatNo("46");
+                   
+          return false;
+
+         
+      //   System.out.println(trainNum);
+}
+
+
+	private String generatePnr() {
+		int pnr = 181286;
+		Integer id = bookingRepository.findMaxBookingId();
+		return "PNR"+(pnr + id);
+	}
+	
+	public Station  findStationBySource(String source)
+	{
+		Station station=stationRepository.findByStationName(source);
+		
+		return station;
+	}
+	public Station  findStationByDestination(String destination)
+	{
+		Station station=stationRepository.findByStationName(destination);
+		
+		return station;
 	}
 }

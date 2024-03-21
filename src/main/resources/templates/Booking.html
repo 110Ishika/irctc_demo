@@ -102,7 +102,7 @@ width:350px;
             <h3 class="text-center">Ticket Booking Form</h3>
           </div>
           <div class="card-body">
-            <form th:action="@{/train/userBookingInfo}" th:object="${userTicket}" method="POST">
+            <form th:action="@{/train/userBookingInfo/}"  th:object="${userTicket}" method="POST">
               <div class="form-group">
                 <label for="name">First Name:</label>
                 <input type="text" class="form-control" id="name" placeholder="Enter your First name"  th:field="*{firstName}">
@@ -128,6 +128,7 @@ width:350px;
       </div>
     </div>
     </div>
+    <span th:text="${train.seat1APrice}"></span>
                <div class="form-group">
                 <label for="Age">Age:</label>
                 <input type="text" class="form-control" id="Age" placeholder="Enter your Age" value="" th:field="*{age}">
@@ -141,25 +142,27 @@ width:350px;
                 <input type="text" class="form-control" id="Adhar" placeholder="Enter your Adhar number"  th:field="*{aadhaar}">
               </div>
              
-               <div class="form-group">
+               <!--  div class="form-group">
                 <label for="pnr">PNR Number:</label>
                 <input type="text" class="form-control" id="pnr" placeholder="Enter your PNR number" th:field="*{pnr}">
-              </div>
+              </div-->
 
               <div class="form-group">
                 <label for="seat">Select Seat Type:</label>
-                <select class="form-control" id="seat" onchange="getSeatType()" th:field="*{seatType}">
+                
+                <select class="form-control" id="seat" onchange="getSeatType()"  th:field="*{seatType}">
                   <option value="-1">Select Seat</option>
-                  <option value="AC 1">AC 1</option>
+                   <option value="AC 2 + ${train.seat2APrice}">AC 1 </option>
                   <option value="AC 2">AC 2</option>
-                  <option value="GEN">GEN</option>
-                  <option value="SLP">SLP</option>
+                  <option value="GEN ,th:text='${train.seatGenPrice}'">GEN</option>
+                  <option value="SLP ,th:text='${train.seatSlPrice}'">SLP</option>
                 </select>
               </div>
-               <div class="form-group">
+              
+               <!-- div class="form-group">
                 <label for="tickets">Select tickets: </label>
                 <input type="number" class="form-control" id="tickets" min="1" placeholder="Enter the number of tickets"  onchange="getNumberOfTickets()">
-              </div>
+              </div-->
              
                 <div class="form-group">
                 <label for="price">Price:  </label>
@@ -167,7 +170,7 @@ width:350px;
               </div>
                <div class="form-group">
                 <label for="date">Booking Date:</label>
-                <input type="text" class="form-control" id="date" value="  23-6-2024" >
+                <input type="text" class="form-control" id="date" value="  23-6-2024" readonly >
               </div>
               <div class="text-center">
                 <button type="submit" class="btn">Book Tickets</button>
@@ -185,8 +188,9 @@ function  getSeatType()
 	const seatValue=document.getElementById("seat");
 	const selectedSeat=seatValue.value;
 	var setPrice;
+	alert("in selected seat");
 	
-	if(selectedSeat=="AC 1")
+	if(selectedSeat=="AC 1 ,320.0")
 		{
 		
 		setPrice=30;
@@ -222,7 +226,7 @@ function  getSeatType()
 	   alert("setPrice -> getNumberOfTickets: " + setPrice);
 
 		
-		 var price = parseInt(setPrice * selectedQuantity);
+		 var price = parseInt(setPrice * selectedQuantity);//isko hatana h n to bsyha se le lenge
 		 alert(" price of inside Ac1  getNumberOfTickets: " + parseInt(price));
 		 showPrice(price);
 		}

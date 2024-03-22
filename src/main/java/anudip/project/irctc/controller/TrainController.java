@@ -38,11 +38,6 @@ public class TrainController {
 	@Autowired
 	private UserService userService;
 	
-	
-
-	@Autowired
-	private UserService userService;
-
 	@GetMapping(value = "/details", params = "id")
 	public String getTrainDetails(@RequestParam("id") String trainNo, Model model, HttpSession httpSession) {
 
@@ -96,9 +91,9 @@ public class TrainController {
   return "traindetails";
 }
 
-	@GetMapping(value = "/Booking", params = { "src", "dst", "train", "date" })
+	@GetMapping(value = "/Booking", params = { "src", "dst","date" ,"train" })
 	public String bookTicket(@RequestParam("src") String source, @RequestParam("dst") String destination,
-			@RequestParam("train") String trainNo, @RequestParam("date") LocalDate date, Model model,HttpSession httpSession) {
+			@RequestParam("date") LocalDate date,@RequestParam("train") String trainNo, Model model,HttpSession httpSession) {
 		System.out.println(source);
 		
 		if (httpSession.getAttribute("email") == null)
@@ -115,8 +110,9 @@ public class TrainController {
         Train train= trainService.getTrainByTrainNo(Integer.parseInt(trainNo));
         bookingInfo.setTrain(train);
        
-		model.addAttribute("userTicket", bookingInfo);
+		model.addAttribute("userTicket", bookingInfo); 
 		model.addAttribute("train",train);
+		
 		
         System.out.println("train is here now ");
 		System.out.println(date instanceof LocalDate);
@@ -152,13 +148,15 @@ public class TrainController {
 		return "tickets";
 	}
     
-	@PostMapping(value = "/userBookingInfo/")
-	public String bookingInfo(@ModelAttribute("userTicket") Booking booking, HttpSession httpSession) {
+	@PostMapping(value = "/userBookingInfo", params = {"src","dst","date","train"})
+	public String bookingInfo(@ModelAttribute("userTicket") Booking booking, @RequestParam("src")
+	String source, @RequestParam("dst") String destination, @RequestParam("date")
+	LocalDate date,@RequestParam("train") String train, HttpSession httpSession) {
+		
 		if (httpSession.getAttribute("email") == null)
 			return "redirect:/user/login";
-
-		System.out.println("welcome");
-		boolean status = trainService.bookTicket(booking);
+	
+		boolean status = trainService.bookTicket(booking,source,destination,date,train,(String)httpSession.getAttribute("email"));
 		System.out.println("booking confirmed");
 		return "getTicket";
 	}

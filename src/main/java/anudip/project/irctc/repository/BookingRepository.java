@@ -20,4 +20,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
 	
 	 @Query("select max(b.bookingId) from Booking b")
 	 Integer findMaxBookingId();
+	 
+	 List<Booking> findAllByTrainAndSeatTypeAndTravelDate(Train train, String seatType, LocalDate traveDate);
+	 
+	 
 }

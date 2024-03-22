@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import org.antlr.v4.runtime.atn.AtomTransition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +27,7 @@ import anudip.project.irctc.repository.TrainAvailableRepository;
 import anudip.project.irctc.repository.TrainRepository;
 import anudip.project.irctc.repository.UserRepository;
 import anudip.project.irctc.service.TrainService;
+import jakarta.annotation.Generated;
 
 @Service
 public class TrainServiceImpl implements TrainService {
@@ -45,10 +46,10 @@ public class TrainServiceImpl implements TrainService {
 
 	@Autowired
 	private StationRepository stationRepository;
-	
+
 	@Autowired
 	private BookingRepository bookingRepository;
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -77,37 +78,38 @@ public class TrainServiceImpl implements TrainService {
 		}
 		return schedule.toString();
 	}
-	
+
 	@Override
 	public List<String> getTrainScheduleList(List<Train> trainList) {
+
 		List<String> scheduleLis = new ArrayList<>();
-		
-		for(Train train : trainList)
+
+		for (Train train : trainList)
 			scheduleLis.add(getTrainScheduleList(train));
-		
+
 		return scheduleLis;
 	}
-	
+
 	@Override
-	public List<Train> getAllTrains(String source, String destination, LocalDate date){
-		
+	public List<Train> getAllTrains(String source, String destination, LocalDate date) {
+
 		List<Train> bySourceDestinationList = filterTrainBySourceAndDestination(source, destination);
 		List<Train> filterByDay = filterTrainByDay(bySourceDestinationList, date);
-		
-		for(Train train : filterByDay) {
-			train.setSeat1ACount(train.getSeat1ACount() - 
-					(int)bookingRepository.countByTrainAndSeatTypeAndTravelDate(train,"AC 1", date));
-			train.setSeat2ACount(train.getSeat2ACount() - 
-					(int)bookingRepository.countByTrainAndSeatTypeAndTravelDate(train,"AC 2", date));
-			train.setSeatSlCount(train.getSeatSlCount() - 
-					(int)bookingRepository.countByTrainAndSeatTypeAndTravelDate(train,"SLP", date));
-			train.setSeatGenCount(train.getSeatGenCount() - 
-					(int)bookingRepository.countByTrainAndSeatTypeAndTravelDate(train,"GEN", date));
+
+		for (Train train : filterByDay) {
+			train.setSeat1ACount(train.getSeat1ACount()
+					- (int) bookingRepository.countByTrainAndSeatTypeAndTravelDate(train, "AC 1", date));
+			train.setSeat2ACount(train.getSeat2ACount()
+					- (int) bookingRepository.countByTrainAndSeatTypeAndTravelDate(train, "AC 2", date));
+			train.setSeatSlCount(train.getSeatSlCount()
+					- (int) bookingRepository.countByTrainAndSeatTypeAndTravelDate(train, "SLP", date));
+			train.setSeatGenCount(train.getSeatGenCount()
+					- (int) bookingRepository.countByTrainAndSeatTypeAndTravelDate(train, "GEN", date));
 		}
-		
+
 		return filterByDay;
 	}
-	
+
 	private List<Train> filterTrainBySourceAndDestination(String source, String destination) {
 		List<Train> trains = new ArrayList<Train>();
 
@@ -118,16 +120,18 @@ public class TrainServiceImpl implements TrainService {
 			for (Destination d : destinationList) {
 				if (d.getTrain().getTrainId() == s.getTrain().getTrainId()) {
 					if (s.getRequiredMinutes() < d.getRequiredMinutes()) {
-						
+
 						s.getTrain().setSource(source);
 						s.getTrain().setDestination(destination);
-						s.getTrain().setArrivalTime(changeTime(s.getTrain().getDepartureTime(), s.getRequiredMinutes()));
-						s.getTrain().setDepartureTime(changeTime(s.getTrain().getDepartureTime(), d.getRequiredMinutes()));
-						
-						s.getTrain().setSeat1APrice(setPrice((int)d.getPrice(),"AC 1"));
-						s.getTrain().setSeat2APrice(setPrice((int)d.getPrice(),"AC 2"));
-						s.getTrain().setSeatSlPrice(setPrice((int)d.getPrice(),"SLP"));
-						s.getTrain().setSeatGenPrice(d.getPrice());
+						s.getTrain()
+								.setArrivalTime(changeTime(s.getTrain().getDepartureTime(), s.getRequiredMinutes()));
+						s.getTrain()
+								.setDepartureTime(changeTime(s.getTrain().getDepartureTime(), d.getRequiredMinutes()));
+
+						s.getTrain().setSeat1APrice(setPrice((int) (d.getPrice() - s.getPrice()), "AC 1"));
+						s.getTrain().setSeat2APrice(setPrice((int) (d.getPrice() - s.getPrice()), "AC 2"));
+						s.getTrain().setSeatSlPrice(setPrice((int) (d.getPrice() - s.getPrice()), "SLP"));
+						s.getTrain().setSeatGenPrice(d.getPrice() - s.getPrice());
 						trains.add(s.getTrain());
 
 					}
@@ -136,50 +140,90 @@ public class TrainServiceImpl implements TrainService {
 		}
 		return trains;
 	}
-	
-	public List<Integer> getPriceBySourceDestinationAndTrain(String source, String destination, Train train){
-		Source from = sourceRepository.findByStationAndTrain(stationRepository.findByStationName(source),train);
-		Destination to = destinationRepository.findByStationAndTrain(stationRepository.findByStationName(destination),train);
+
+	public List<Integer> getPriceBySourceDestinationAndTrain(String source, String destination, Train train) {
+		Source from = sourceRepository.findByStationAndTrain(stationRepository.findByStationName(source), train);
+		Destination to = destinationRepository.findByStationAndTrain(stationRepository.findByStationName(destination),
+				train);
 		System.out.println(to.getPrice());
 		System.out.println(from.getPrice());
-		int price = (int)(to.getPrice() - from.getPrice());
-		
+		int price = (int) (to.getPrice() - from.getPrice());
+
 		List<Integer> priceList = new ArrayList<>();
-		
+
 		priceList.add(setPrice(price, "AC 1"));
 		priceList.add(setPrice(price, "AC 2"));
 		priceList.add(setPrice(price, "SLP"));
 		priceList.add(setPrice(price, "GEN"));
-		
+
 		return priceList;
 	}
-	
+
+	public String generateSeatNo(Train train, String seatType, LocalDate date) {
+		List<Booking> bookingList = bookingRepository.findAllByTrainAndSeatTypeAndTravelDate(train, seatType, date);
+		int size = 0;
+		String seat = "CNF/";
+		if (seatType.equalsIgnoreCase("AC 1")) {
+			size = train.getSeat1ACount();
+			seat += "AC1/";
+		}
+
+		else if (seatType.equalsIgnoreCase("AC 2")) {
+			size = train.getSeat2ACount();
+			seat += "AC2/";
+		}
+
+		else if (seatType.equalsIgnoreCase("SLP")) {
+			size = train.getSeatSlCount();
+			seat += "SLP/";
+		}
+
+		else {
+			size = train.getSeatGenCount();
+			seat += "GEN/";
+		}
+
+		Map<Integer, String> seatMap = new HashMap<Integer, String>();
+		for (Booking booking : bookingList) {
+			String[] sp = booking.getSeatNo().split("/");
+			seatMap.put(Integer.parseInt(sp[2]), sp[2]);
+		}
+
+		for (int i = 1; i <= size; i++) {
+			if (seatMap.get(i) == null) {
+				seat += i;
+				break;
+			}
+		}
+		return seat;
+	}
+
 	private int setPrice(int price, String seatType) {
-		if(seatType.equalsIgnoreCase("AC 1"))
+		if (seatType.equalsIgnoreCase("AC 1"))
 			return price * 6;
-		if(seatType.equalsIgnoreCase("AC 2"))
+		if (seatType.equalsIgnoreCase("AC 2"))
 			return price * 4;
-		if(seatType.equalsIgnoreCase("SLP"))
+		if (seatType.equalsIgnoreCase("SLP"))
 			return price * 2;
 		return price;
 	}
-	
-	private List<Train> filterTrainByDay(List<Train> trains, LocalDate date){
+
+	private List<Train> filterTrainByDay(List<Train> trains, LocalDate date) {
 		int day = date.getDayOfWeek().getValue();
 		List<Train> trainList = new ArrayList<>();
-		
-		for(Train train : trains) {
+
+		for (Train train : trains) {
 			List<TrainAvailableDays> trainScheduleList = trainAvailableRepository.findAllByTrain(train);
-			
-			if(isTrainAvailableOnDay(trainScheduleList, day))
+
+			if (isTrainAvailableOnDay(trainScheduleList, day))
 				trainList.add(train);
 		}
 		return trainList;
 	}
-	
+
 	private boolean isTrainAvailableOnDay(List<TrainAvailableDays> trainAvailableDays, int day) {
-		for(TrainAvailableDays days : trainAvailableDays) {
-			if(days.getDay() == day || days.getDay() == 8)
+		for (TrainAvailableDays days : trainAvailableDays) {
+			if (days.getDay() == day || days.getDay() == 8)
 				return true;
 		}
 		return false;
@@ -241,51 +285,58 @@ public class TrainServiceImpl implements TrainService {
 		hourMinute[1] = String.valueOf((Integer.parseInt(minute) + minutes) % 60);
 
 		hourMinute[0] = String.valueOf((Integer.parseInt(hourMinute[0]) + hour) % 24);
-		hourMinute[1] += hourMinute[1].length()==1 ? "0" : "";
+		hourMinute[1] += hourMinute[1].length() == 1 ? "0" : "";
 		return hourMinute[0] + ":" + hourMinute[1];
 	}
 
 	@Override
-	public List<Booking> getAllBookingByUser(User user) { 
+	public List<Booking> getAllBookingByUser(User user) {
 		return bookingRepository.findAllByUser(user);
 	}
 	
-
+	@Override
 	public boolean bookTicket(Booking booking) {
 		System.out.println("Inside Book Ticket");
-		   Station sourceStation= findStationBySource(booking.getSource());
-	        int stationId=sourceStation.getStationId();
-	        System.out.println(stationId);
-	        Station stationDes=findStationByDestination(booking.getDestination());
-	        int destinationId=stationDes.getStationId();
-	        System.out.println(destinationId);
-    Source source= sourceRepository.findSourceByStationAndTrain(booking.getTrain(),sourceStation);
-	        
-	        System.out.println("got source object");
-          booking.setPnr(generatePnr());
-          booking.setSeatNo("46");
-                   
-          return false;
+		Station sourceStation = findStationBySource(booking.getSource());
+		int stationId = sourceStation.getStationId();
+		System.out.println(stationId);
+		Station stationDes = findStationByDestination(booking.getDestination());
+		int destinationId = stationDes.getStationId();
+		System.out.println(destinationId);
+		Source source = sourceRepository.findSourceByStationAndTrain(booking.getTrain(), sourceStation);
 
-         
-      //   System.out.println(trainNum);
-}
+		System.out.println("got source object");
+		booking.setPnr(generatePnr());
+		booking.setSeatNo("46");
+
+		return false;
+
+	}
+	
+	@Override
+	public Booking getBookingByPnr(String pnr) {
+		return bookingRepository.findByPnr(pnr);
+	}
 
 	private String generatePnr() {
 		int pnr = 181286;
 		Integer id = bookingRepository.findMaxBookingId();
-		return "PNR"+(pnr + id);
+		return "PNR" + (pnr + id);
+	}
+
+	public Station findStationBySource(String source) {
+		Station station = stationRepository.findByStationName(source);
+
+		return station;
+	}
+
+	public Station findStationByDestination(String destination) {
+		Station station = stationRepository.findByStationName(destination);
+
+		return station;
 	}
 	
-	public Station  findStationBySource(String source) {
-		Station station=stationRepository.findByStationName(source);
-		
-		return station;
-	}
-  
-	public Station  findStationByDestination(String destination){
-		Station station=stationRepository.findByStationName(destination);
-		
-		return station;
+	public void cancelTicket(String pnr) {
+		bookingRepository.deleteByPnr(pnr);
 	}
 }

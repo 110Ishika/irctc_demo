@@ -36,4 +36,10 @@ public interface TrainService {
 	Station  findStationBySource(String source);
 	
 	Station  findStationByDestination(String destination);
+	
+	String generateSeatNo(Train train, String seatType, LocalDate date);
+	
+	Booking getBookingByPnr(String pnr);
+	
+	void cancelTicket(String pnr);
 }

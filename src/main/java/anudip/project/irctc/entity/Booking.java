@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -67,6 +68,7 @@ public class Booking {
 	private float price;
 	
 	@Column(name = "travel_date", nullable = false)
+	@Future
 	private LocalDate travelDate;
 	
 	@Column(nullable = false)

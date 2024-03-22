@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -177,7 +177,7 @@ footer {
 						</section>
 					</div>
 					<div class="Book_part">
-						<a th:href="@{/train/tickets?pnr=} + ${booking.pnr}">
+						<a th:href="@{/train/cancel?pnr=} + ${booking.pnr}">
 							<button onclick="test(this)">Cancel Ticket</button>
 						</a>
 					</div>
@@ -185,5 +185,11 @@ footer {
 			</div>
 		</div>
 	</div>
+	
+	<footer>
+		<div class="container">
+			<p>© 2024 IRCTC. All rights reserved.</p>
+		</div>
+	</footer>
 </body>
 </html>

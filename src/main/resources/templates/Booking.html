@@ -145,10 +145,7 @@ width:350px;
                 <input type="text" class="form-control" id="Adhar" placeholder="Enter your Adhar number"  th:field="*{aadhaar}">
               </div>
              
-               <!--  div class="form-group">
-                <label for="pnr">PNR Number:</label>
-                <input type="text" class="form-control" id="pnr" placeholder="Enter your PNR number" th:field="*{pnr}">
-              </div-->
+           
 
               <div class="form-group">
                 <label for="seat">Select Seat Type:</label>
@@ -161,16 +158,8 @@ width:350px;
                   <option value="SLP">SLP</option>
                 </select>
               </div>
-              
-               <!-- div class="form-group">
-                <label for="tickets">Select tickets: </label>
-                <input type="number" class="form-control" id="tickets" min="1" placeholder="Enter the number of tickets"  onchange="getNumberOfTickets()">
-              </div-->
+      
              
-                <div class="form-group">
-                <label for="price">Price:  </label>
-                <input type="text" class="form-control" id="price" value="" th:field="*{price}">
-              </div>
                <div class="form-group">
                 <label for="date">Booking Date:</label>
                 <input type="text" class="form-control" id="date" value="  23-6-2024" readonly >
@@ -184,67 +173,7 @@ width:350px;
       </div>
     </div>
   </div>
-
-<script>
-function  getSeatType()
-{
-	const seatValue=document.getElementById("seat");
-	const selectedSeat=seatValue.value;
-	var setPrice;
-	alert("in selected seat");
-	
-	if(selectedSeat=="AC 1 ,320.0")
-		{
-		
-		setPrice=30;
-		alert("inside Ac1 :"+ setPrice);
-		
-		}
-	else if(selectedSeat=="AC 2")
-	{
-	setPrice=50;
-	}
-	else if(selectedSeat=="GEN")
-	{
-	setPrice=10;
-	}
-	else if(selectedSeat=="SLP")
-	{
-	setPrice=20;
-	}
-	//alert("selected Seat: "+selectedSeat);
-	 getNumberOfTickets(setPrice);
-	
-	}
-	
-	function getNumberOfTickets(setPrice)
-	{
-		 
-		var quantity=document.getElementById("tickets");
-		var selectedQuantity= parseInt(quantity.value);
-		
-		if(selectedQuantity>0){
-		alert("selectedQuantity -> getNumberOfTickets: " + selectedQuantity);
-		//alert("Type of" + typeof selectedQuantity);
-	   alert("setPrice -> getNumberOfTickets: " + setPrice);
-
-		
-		 var price = parseInt(setPrice * selectedQuantity);//isko hatana h n to bsyha se le lenge
-		 alert(" price of inside Ac1  getNumberOfTickets: " + parseInt(price));
-		 showPrice(price);
-		}
-		
-		
-	}
-	function showPrice(price)
-	{
-		var priceLocation=document.getElementById("price");
-		priceLocation.value=parseInt(price.value);
-		
-	}
-	
-</script>
-  <!-- Bootstrap JS -->
+  
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

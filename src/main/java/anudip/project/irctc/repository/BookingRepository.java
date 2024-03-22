@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import anudip.project.irctc.entity.Booking;
 import anudip.project.irctc.entity.Train;
 import anudip.project.irctc.entity.User;
+import jakarta.transaction.Transactional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer>{
@@ -23,5 +24,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
 	 
 	 List<Booking> findAllByTrainAndSeatTypeAndTravelDate(Train train, String seatType, LocalDate traveDate);
 	 
+	 Booking findByPnr(String pnr);
 	 
+	 @Transactional
+	 void deleteByPnr(String pnr);
 }

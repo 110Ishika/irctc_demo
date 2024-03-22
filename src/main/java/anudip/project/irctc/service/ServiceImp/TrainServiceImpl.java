@@ -27,7 +27,10 @@ import anudip.project.irctc.repository.TrainAvailableRepository;
 import anudip.project.irctc.repository.TrainRepository;
 import anudip.project.irctc.repository.UserRepository;
 import anudip.project.irctc.service.TrainService;
+
 import jakarta.annotation.Generated;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class TrainServiceImpl implements TrainService {
@@ -127,11 +130,11 @@ public class TrainServiceImpl implements TrainService {
 								.setArrivalTime(changeTime(s.getTrain().getDepartureTime(), s.getRequiredMinutes()));
 						s.getTrain()
 								.setDepartureTime(changeTime(s.getTrain().getDepartureTime(), d.getRequiredMinutes()));
-
 						s.getTrain().setSeat1APrice(setPrice((int) (d.getPrice() - s.getPrice()), "AC 1"));
 						s.getTrain().setSeat2APrice(setPrice((int) (d.getPrice() - s.getPrice()), "AC 2"));
 						s.getTrain().setSeatSlPrice(setPrice((int) (d.getPrice() - s.getPrice()), "SLP"));
 						s.getTrain().setSeatGenPrice(d.getPrice() - s.getPrice());
+
 						trains.add(s.getTrain());
 
 					}
@@ -157,45 +160,6 @@ public class TrainServiceImpl implements TrainService {
 		priceList.add(setPrice(price, "GEN"));
 
 		return priceList;
-	}
-
-	public String generateSeatNo(Train train, String seatType, LocalDate date) {
-		List<Booking> bookingList = bookingRepository.findAllByTrainAndSeatTypeAndTravelDate(train, seatType, date);
-		int size = 0;
-		String seat = "CNF/";
-		if (seatType.equalsIgnoreCase("AC 1")) {
-			size = train.getSeat1ACount();
-			seat += "AC1/";
-		}
-
-		else if (seatType.equalsIgnoreCase("AC 2")) {
-			size = train.getSeat2ACount();
-			seat += "AC2/";
-		}
-
-		else if (seatType.equalsIgnoreCase("SLP")) {
-			size = train.getSeatSlCount();
-			seat += "SLP/";
-		}
-
-		else {
-			size = train.getSeatGenCount();
-			seat += "GEN/";
-		}
-
-		Map<Integer, String> seatMap = new HashMap<Integer, String>();
-		for (Booking booking : bookingList) {
-			String[] sp = booking.getSeatNo().split("/");
-			seatMap.put(Integer.parseInt(sp[2]), sp[2]);
-		}
-
-		for (int i = 1; i <= size; i++) {
-			if (seatMap.get(i) == null) {
-				seat += i;
-				break;
-			}
-		}
-		return seat;
 	}
 
 	private int setPrice(int price, String seatType) {
@@ -293,35 +257,120 @@ public class TrainServiceImpl implements TrainService {
 	public List<Booking> getAllBookingByUser(User user) {
 		return bookingRepository.findAllByUser(user);
 	}
-	
-	@Override
-	public boolean bookTicket(Booking booking) {
-		System.out.println("Inside Book Ticket");
-		Station sourceStation = findStationBySource(booking.getSource());
-		int stationId = sourceStation.getStationId();
-		System.out.println(stationId);
-		Station stationDes = findStationByDestination(booking.getDestination());
-		int destinationId = stationDes.getStationId();
-		System.out.println(destinationId);
-		Source source = sourceRepository.findSourceByStationAndTrain(booking.getTrain(), sourceStation);
 
-		System.out.println("got source object");
-		booking.setPnr(generatePnr());
-		booking.setSeatNo("46");
+//	@Override
+//	public boolean bookTicket(Booking booking) {
+//		System.out.println("Inside Book Ticket");
+//		Station sourceStation = findStationBySource(booking.getSource());
+//		int stationId = sourceStation.getStationId();
+//		System.out.println(stationId);
+//		Station stationDes = findStationByDestination(booking.getDestination());
+//		int destinationId = stationDes.getStationId();
+//		System.out.println(destinationId);
+//		Source source = sourceRepository.findSourceByStationAndTrain(booking.getTrain(), sourceStation);
+//
+//		System.out.println("got source object");
+//		booking.setPnr(generatePnr());
+//		booking.setSeatNo("46");
+//
+//		return false;
+//
+//	}
 
-		return false;
-
-	}
-	
 	@Override
 	public Booking getBookingByPnr(String pnr) {
 		return bookingRepository.findByPnr(pnr);
+	}
+
+	public boolean bookTicket(Booking booking, String source, String destination, LocalDate date, String train,
+			String email) {
+		
+		float newPrice = 0;
+		
+		Station sourceStation = findStationBySource(source);
+		
+		Station stationDes = findStationByDestination(destination);
+		
+		Train trainObj = trainRepository.getTrainByTrainNo(Integer.parseInt(train));
+		Source sourceObj = sourceRepository.findByStationAndTrain(sourceStation, trainObj);
+		Destination destinationObj = destinationRepository.findByStationAndTrain(stationDes, trainObj);
+		
+		User user = userRepository.findByEmail(email);
+		
+		float price = destinationObj.getPrice() - sourceObj.getPrice();
+		if (booking.getSeatType().equals("AC 1")) {
+			newPrice = price * 6;
+		} else if (booking.getSeatType().equals("AC 2")) {
+			newPrice = price * 4;
+		} else if (booking.getSeatType().equals("SLP")) {
+			newPrice = price * 2;
+		} else {
+			newPrice = price;
+		}
+		
+		booking.setTrain(trainObj);
+		booking.setSource(source);
+		booking.setDestination(destination);
+		booking.setTravelDate(date);
+		booking.setUser(user);
+		booking.setPrice(newPrice);
+		booking.setPnr(generatePnr());
+		
+		booking.setSeatNo(generateSeatNo(trainObj, booking.getSeatType(), date));
+		booking.setStatus("confirm");
+		bookingRepository.save(booking);
+
+		return false;
 	}
 
 	private String generatePnr() {
 		int pnr = 181286;
 		Integer id = bookingRepository.findMaxBookingId();
 		return "PNR" + (pnr + id);
+	}
+
+	public void cancelTicket(String pnr) {
+		bookingRepository.deleteByPnr(pnr);
+
+	}
+
+	public String generateSeatNo(Train train, String seatType, LocalDate date) {
+		List<Booking> bookingList = bookingRepository.findAllByTrainAndSeatTypeAndTravelDate(train, seatType, date);
+		int size = 0;
+		String seat = "CNF/";
+		if (seatType.equalsIgnoreCase("AC 1")) {
+			size = train.getSeat1ACount();
+			seat += "AC1/";
+		}
+
+		else if (seatType.equalsIgnoreCase("AC 2")) {
+			size = train.getSeat2ACount();
+			seat += "AC2/";
+		}
+
+		else if (seatType.equalsIgnoreCase("SLP")) {
+			size = train.getSeatSlCount();
+			seat += "SLP/";
+		}
+
+		else {
+			size = train.getSeatGenCount();
+			seat += "GEN/";
+		}
+
+		Map<Integer, String> seatMap = new HashMap<Integer, String>();
+		for (Booking booking : bookingList) {
+			String[] sp = booking.getSeatNo().split("/");
+			seatMap.put(Integer.parseInt(sp[2]), sp[2]);
+		}
+
+		for (int i = 1; i <= size; i++) {
+			if (seatMap.get(i) == null) {
+				seat += i;
+				break;
+			}
+		}
+		return seat;
 	}
 
 	public Station findStationBySource(String source) {
@@ -334,9 +383,5 @@ public class TrainServiceImpl implements TrainService {
 		Station station = stationRepository.findByStationName(destination);
 
 		return station;
-	}
-	
-	public void cancelTicket(String pnr) {
-		bookingRepository.deleteByPnr(pnr);
 	}
 }

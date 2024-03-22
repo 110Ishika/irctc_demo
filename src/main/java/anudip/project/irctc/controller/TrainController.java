@@ -66,20 +66,6 @@ public class TrainController {
 	}
 
 	/**
-	 * Method used to hit a particular html page
-	 * 
-	 * @param httpSession - To Manage User Session
-	 * @return - return to html page
-	 */
-	@GetMapping("/details")
-	public String trainDetails(HttpSession httpSession) {
-
-		if (httpSession.getAttribute("email") == null)
-			return "redirect:/user/login";
-		return "traindetails";
-	}
-
-	/**
 	 * Method used to book tickets for user
 	 * 
 	 * @param source      - source station of journey
@@ -161,13 +147,34 @@ public class TrainController {
 
 	}
 
-	/**
-	 * Method used to populate user all confirmed tickets
-	 * 
-	 * @param model       - Model used to bind and transfer data to UI
-	 * @param httpSession - To Manage User Session
-	 * @return - return to html page
-	 */
+	@GetMapping(value = "/Booking", params = { "src", "dst", "date", "train" })
+	public String bookTicket(@RequestParam("src") String source, @RequestParam("dst") String destination,
+			@RequestParam("date") LocalDate date, @RequestParam("train") String trainNo, Model model,
+			HttpSession httpSession) {
+		System.out.println(source);
+
+		if (httpSession.getAttribute("email") == null)
+			return "redirect:/user/login";
+
+		User user = userService.getUserByEmail((String) httpSession.getAttribute("email"));
+
+		Booking bookingInfo = new Booking();
+		bookingInfo.setSource(source);
+		bookingInfo.setDestination(destination);
+		bookingInfo.setTravelDate(date);
+		bookingInfo.setUser(user);
+		Train train = trainService.getTrainByTrainNo(Integer.parseInt(trainNo));
+		bookingInfo.setTrain(train);
+
+		model.addAttribute("userTicket", bookingInfo);
+		model.addAttribute("train", train);
+
+		System.out.println("train is here now ");
+		System.out.println(date instanceof LocalDate);
+		return "booking";
+
+	}
+
 	@GetMapping("/tickets")
 	public String ticketManagement(Model model, HttpSession httpSession) {
 
@@ -190,13 +197,17 @@ public class TrainController {
 	 * @param httpSession - To Manage User Session
 	 * @return - return to html page
 	 */
-	@PostMapping(value = "/userBookingInfo/")
-	public String bookingInfo(@ModelAttribute("userTicket") Booking booking, HttpSession httpSession) {
+
+	@PostMapping(value = "/userBookingInfo", params = { "src", "dst", "date", "train" })
+	public String bookingInfo(@ModelAttribute("userTicket") Booking booking, @RequestParam("src") String source,
+			@RequestParam("dst") String destination, @RequestParam("date") LocalDate date,
+			@RequestParam("train") String train, HttpSession httpSession) {
+
 		if (httpSession.getAttribute("email") == null)
 			return "redirect:/user/login";
 
-		boolean status = trainService.bookTicket(booking);
-		System.out.println("booking confirmed");
+		boolean status = trainService.bookTicket(booking, source, destination, date, train,
+				(String) httpSession.getAttribute("email"));
 		return "getTicket";
 	}
 

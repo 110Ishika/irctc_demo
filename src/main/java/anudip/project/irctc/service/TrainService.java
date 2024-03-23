@@ -31,7 +31,7 @@ public interface TrainService {
 	
 	List<Integer> getPriceBySourceDestinationAndTrain(String source, String destination, Train train);
 
-	public boolean bookTicket(Booking booking,String source,String destination,LocalDate date,String train,String email);
+	boolean bookTicket(Booking booking,String source,String destination,LocalDate date,String train,String email);
 
 	Station  findStationBySource(String source);
 	

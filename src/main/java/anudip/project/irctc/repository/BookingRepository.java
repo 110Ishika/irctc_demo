@@ -13,6 +13,9 @@ import anudip.project.irctc.entity.Train;
 import anudip.project.irctc.entity.User;
 import jakarta.transaction.Transactional;
 
+/**
+ * Author: Ishika Dey
+ */
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer>{
 	long countByTrainAndSeatTypeAndTravelDate(Train train, String seatType, LocalDate travelDate);

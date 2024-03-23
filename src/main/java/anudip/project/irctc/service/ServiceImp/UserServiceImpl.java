@@ -32,15 +32,22 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserVerificationRepository userVerificationRepository;
 
+	/**
+	 * Method is used to save the user to database
+	 */
 	@Override
 	public User saveUser(User user) {
 		user.setPassword(passwordEncryption(user.getPassword()));
-
+		System.out.println(user.getUserId());
 		if (user.getUserId() != 0)
 			return updateUser(user);
+		
 		return userRepository.save(user);
 	}
 
+	/**
+	 * Method is used to save user to data bases and send otp to used
+	 */
 	@Override
 	public void saveUserAndSentOtp(User user) {
 		User savedUser = saveUser(user);
@@ -59,6 +66,9 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	/**
+	 * Method is used to verify used otp and activate the user
+	 */
 	@Override
 	public boolean verifyUser(UserVerification toVerify) {
 		boolean isVerified = false;
@@ -74,16 +84,25 @@ public class UserServiceImpl implements UserService {
 		return isVerified;
 	}
 
+	/**
+	 * Method is used to return all user list
+	 */
 	@Override
 	public List<User> getAllUser() {
 		return userRepository.findAll();
 	}
 
+	/**
+	 * Method is used to find user using email address
+	 */
 	@Override
 	public User getUserByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
 
+	/**
+	 * Method is used to update an existing user
+	 */
 	@Override
 	public User updateUser(User user) {
 		User existedUser = userRepository.findByEmail(user.getEmail());
@@ -91,18 +110,24 @@ public class UserServiceImpl implements UserService {
 		existedUser.setLastName(user.getLastName());
 		existedUser.setEmail(user.getEmail());
 		existedUser.setContact(user.getContact());
-		existedUser.setPassword(passwordEncryption(user.getPassword()));
+		existedUser.setPassword(user.getPassword());
 		existedUser.setStatus(user.getStatus());
 		existedUser.setRole(user.getRole());
 
 		return userRepository.save(existedUser);
 	}
 
+	/**
+	 * Method is used to delete the user
+	 */
 	@Override
 	public void deleteUser(int userId) {
 		userRepository.deleteById(userId);
 	}
 
+	/**
+	 * Method is used to send mail to given mail address
+	 */
 	@Override
 	public void sentVerificationMail(String toEmail, String userName, int otp, String role) throws MessagingException {
 		SimpleMailMessage message = new SimpleMailMessage();
@@ -118,6 +143,9 @@ public class UserServiceImpl implements UserService {
 		mailSender.send(message);
 	}
 
+	/**
+	 * Method is used to authenticate used using user given credentials
+	 */
 	@Override
 	public boolean userAuthentication(Login login) {
 		User user = userRepository.findByEmail(login.getEmail());
@@ -128,17 +156,22 @@ public class UserServiceImpl implements UserService {
 		return checkPassword(login.getPassword(), user.getPassword());
 	}
 
+	/**
+	 * Method is used to generate and return 4 digit otp
+	 */
 	private int generateOTP() {
 		String otp = "";
 
 		while (otp.length() != 4) {
 
-			otp = String.valueOf(Math.abs((LocalTime.now().getNano()
-					* (LocalTime.now().getNano() % 9753)) % 9999));
+			otp = String.valueOf(Math.abs((LocalTime.now().getNano() * (LocalTime.now().getNano() % 9753)) % 9999));
 		}
 		return Integer.parseInt(otp);
 	}
 
+	/**
+	 * Method is used return mail body based on user role
+	 */
 	private String getMailBody(String userName, int otp, String role) {
 
 		String forUser = "Dear " + userName + ",\n\n" + "Thank you for your registration in IRCTC. \n\n"
@@ -153,11 +186,17 @@ public class UserServiceImpl implements UserService {
 		return role.equalsIgnoreCase("user") ? forUser : forAdmin;
 	}
 
+	/**
+	 * Mail is used to encrypt user given password using bCrypt algorithm
+	 */
 	private String passwordEncryption(String password) {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		return bCryptPasswordEncoder.encode(password);
 	}
 
+	/**
+	 * Method used to match user hash password and user given plain password
+	 */
 	private boolean checkPassword(String password, String hashPassword) {
 		return BCrypt.checkpw(password, hashPassword);
 	}

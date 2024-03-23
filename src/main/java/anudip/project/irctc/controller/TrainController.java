@@ -64,6 +64,15 @@ public class TrainController {
 		model.addAttribute("incorrect", incorrect);
 		return "traindetails";
 	}
+	
+	@GetMapping(value = "/details")
+	public String getTrainDetails(HttpSession httpSession) {
+
+		if (httpSession.getAttribute("email") == null)
+			return "redirect:/user/login";
+
+		return "traindetails";
+	}
 
 	/**
 	 * Method used to book tickets for user
@@ -80,7 +89,6 @@ public class TrainController {
 	public String bookTicket(@RequestParam("src") String source, @RequestParam("dst") String destination,
 			@RequestParam("train") String trainNo, @RequestParam("date") LocalDate date, Model model,
 			HttpSession httpSession) {
-		System.out.println(source);
 
 		if (httpSession.getAttribute("email") == null)
 			return "redirect:/user/login";
@@ -98,8 +106,6 @@ public class TrainController {
 		model.addAttribute("userTicket", bookingInfo);
 		model.addAttribute("train", train);
 
-		System.out.println("train is here now ");
-		System.out.println(date instanceof LocalDate);
 		return "booking";
 
 	}
@@ -146,35 +152,13 @@ public class TrainController {
 		return "SearchBydate";
 
 	}
-
-	@GetMapping(value = "/Booking", params = { "src", "dst", "date", "train" })
-	public String bookTicket(@RequestParam("src") String source, @RequestParam("dst") String destination,
-			@RequestParam("date") LocalDate date, @RequestParam("train") String trainNo, Model model,
-			HttpSession httpSession) {
-		System.out.println(source);
-
-		if (httpSession.getAttribute("email") == null)
-			return "redirect:/user/login";
-
-		User user = userService.getUserByEmail((String) httpSession.getAttribute("email"));
-
-		Booking bookingInfo = new Booking();
-		bookingInfo.setSource(source);
-		bookingInfo.setDestination(destination);
-		bookingInfo.setTravelDate(date);
-		bookingInfo.setUser(user);
-		Train train = trainService.getTrainByTrainNo(Integer.parseInt(trainNo));
-		bookingInfo.setTrain(train);
-
-		model.addAttribute("userTicket", bookingInfo);
-		model.addAttribute("train", train);
-
-		System.out.println("train is here now ");
-		System.out.println(date instanceof LocalDate);
-		return "booking";
-
-	}
-
+	
+	/**
+	 * Method to find show details of all tickets of user
+	 * @param model       - Model used to bind and transfer data to UI
+	 * @param httpSession - To Manage User Session
+	 * @return - return to html page
+	 */
 	@GetMapping("/tickets")
 	public String ticketManagement(Model model, HttpSession httpSession) {
 

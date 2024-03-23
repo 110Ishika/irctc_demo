@@ -5,12 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import anudip.project.irctc.entity.Station;
 
+/**
+ * Author: Ishika Dey
+ */
 @Repository
 public interface StationRepository  extends JpaRepository<Station, Integer> {
     Station findByStationName(String stationName);
 }
-
-
-
-
-

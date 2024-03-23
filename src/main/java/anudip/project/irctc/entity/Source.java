@@ -18,11 +18,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Author: Ishika Dey
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-
 @Entity
 @Table(name = "tbl_source")
 

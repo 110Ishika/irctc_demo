@@ -6,10 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import anudip.project.irctc.entity.Destination;
-import anudip.project.irctc.entity.Source;
 import anudip.project.irctc.entity.Station;
 import anudip.project.irctc.entity.Train;
 
+/**
+ * Author: Aniket Mishra
+ */
 @Repository
 public interface DestinationRepository extends JpaRepository<Destination, Integer> {
   List<Destination> findAllByStation(Station station);

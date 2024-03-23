@@ -21,7 +21,7 @@ The IRCTC Prototype is a web-based application designed to mimic the functionali
 - Upon successful login, users are redirected to the train search page.
 - Users can search for trains using two methods:
   - By providing the source, destination, and date to view all available trains on that particular date.
-  - By entering a specific train ID to view the full route and details of that train.
+  - By entering a specific train Number to view the full route and details of that train.
 
 ### 5. Booking Tickets
 - Users can book tickets for available seats on desired trains.

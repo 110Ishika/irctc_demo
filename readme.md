@@ -1,7 +1,7 @@
-# Prototype of IRCTC
+# IRCTC Prototype
 
 ## Overview
-The Prototype of IRCTC is a web-based application designed to mimic the functionality of the Indian Railway Catering and Tourism Corporation (IRCTC) system. It provides users with the ability to register, login, search for trains, book tickets, and cancel tickets. The project is built using Spring Boot, Spring MVC, Hibernate, Thymeleaf, and MySQL, incorporating both client and server-side authentication for enhanced security.
+The IRCTC Prototype is a web-based application designed to mimic the functionality of the Indian Railway Catering and Tourism Corporation (IRCTC) system. It provides users with the ability to register, login, search for trains, book tickets, and cancel tickets. The project is built using Spring Boot, Spring MVC, Hibernate, Thymeleaf, and MySQL, incorporating both client and server-side authentication for enhanced security.
 
 ## Features
 

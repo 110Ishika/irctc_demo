@@ -1,7 +1,5 @@
 package anudip.project.irctc.model;
 
-import java.io.Serializable;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Author: Aniket Mishra
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

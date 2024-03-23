@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import anudip.project.irctc.entity.User;
 
-
+/**
+ * Author: Ishika Dey
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 	User findByEmail(String email);

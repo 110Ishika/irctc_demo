@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +26,6 @@ import anudip.project.irctc.repository.TrainAvailableRepository;
 import anudip.project.irctc.repository.TrainRepository;
 import anudip.project.irctc.repository.UserRepository;
 import anudip.project.irctc.service.TrainService;
-
-import jakarta.annotation.Generated;
-
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class TrainServiceImpl implements TrainService {
@@ -56,11 +51,17 @@ public class TrainServiceImpl implements TrainService {
 	@Autowired
 	private UserRepository userRepository;
 
+	/**
+	 * Method used to get Train Object using train number
+	 */
 	@Override
 	public Train getTrainByTrainNo(int trainNo) {
 		return trainRepository.findByTrainNo(trainNo).orElse(null);
 	}
 
+	/**
+	 * Method used to get Particular train schedule by using train object
+	 */
 	@Override
 	public String getTrainScheduleList(Train train) {
 		Map<Integer, String> dayMapping = new HashMap<>();
@@ -82,6 +83,10 @@ public class TrainServiceImpl implements TrainService {
 		return schedule.toString();
 	}
 
+	/**
+	 * Method is used to get schedule of all train using train list
+	 *
+	 */
 	@Override
 	public List<String> getTrainScheduleList(List<Train> trainList) {
 
@@ -93,6 +98,10 @@ public class TrainServiceImpl implements TrainService {
 		return scheduleLis;
 	}
 
+	/**
+	 * to find all train according to user input from particular source to
+	 * destination on a particular date
+	 */
 	@Override
 	public List<Train> getAllTrains(String source, String destination, LocalDate date) {
 
@@ -113,6 +122,11 @@ public class TrainServiceImpl implements TrainService {
 		return filterByDay;
 	}
 
+	/*
+	 * method used to find a list of train by filtering source and destination
+	 * having same train Id
+	 * 
+	 */
 	private List<Train> filterTrainBySourceAndDestination(String source, String destination) {
 		List<Train> trains = new ArrayList<Train>();
 
@@ -144,6 +158,10 @@ public class TrainServiceImpl implements TrainService {
 		return trains;
 	}
 
+	/**
+	 * Method is used to find the price list of all types of seat of a particular
+	 * train from particular source to particular destination
+	 */
 	public List<Integer> getPriceBySourceDestinationAndTrain(String source, String destination, Train train) {
 		Source from = sourceRepository.findByStationAndTrain(stationRepository.findByStationName(source), train);
 		Destination to = destinationRepository.findByStationAndTrain(stationRepository.findByStationName(destination),
@@ -162,6 +180,9 @@ public class TrainServiceImpl implements TrainService {
 		return priceList;
 	}
 
+	/**
+	 * Method is used to find the price of seat based on seat type
+	 */
 	private int setPrice(int price, String seatType) {
 		if (seatType.equalsIgnoreCase("AC 1"))
 			return price * 6;
@@ -172,6 +193,9 @@ public class TrainServiceImpl implements TrainService {
 		return price;
 	}
 
+	/**
+	 * Method is used to filer Train list running on a particular day
+	 */
 	private List<Train> filterTrainByDay(List<Train> trains, LocalDate date) {
 		int day = date.getDayOfWeek().getValue();
 		List<Train> trainList = new ArrayList<>();
@@ -185,6 +209,10 @@ public class TrainServiceImpl implements TrainService {
 		return trainList;
 	}
 
+	/**
+	 * Method is used to check if given train is available on a particular day or
+	 * not
+	 */
 	private boolean isTrainAvailableOnDay(List<TrainAvailableDays> trainAvailableDays, int day) {
 		for (TrainAvailableDays days : trainAvailableDays) {
 			if (days.getDay() == day || days.getDay() == 8)
@@ -193,6 +221,9 @@ public class TrainServiceImpl implements TrainService {
 		return false;
 	}
 
+	/**
+	 * Method is used to get List of Sources with Trains running on that particular station
+	 */
 	@Override
 	public List<Source> getTrainBySource(String source) {
 		Station station = stationRepository.findByStationName(source);
@@ -200,7 +231,10 @@ public class TrainServiceImpl implements TrainService {
 
 		return sourceList;
 	}
-
+	
+	/**
+	 * Method is used to get List of Destination with Trains running on that particular station
+	 */
 	@Override
 	public List<Destination> getTrainByDestination(String destination) {
 		Station station = stationRepository.findByStationName(destination);
@@ -208,7 +242,10 @@ public class TrainServiceImpl implements TrainService {
 
 		return destinationList;
 	}
-
+	
+	/**
+	 * Method is used to get the train route of a particular train
+	 */
 	@Override
 	public List<Route> getTrainRoute(Train train) {
 		List<Source> sourceList = sourceRepository.findAllByTrain(train);
@@ -216,6 +253,9 @@ public class TrainServiceImpl implements TrainService {
 		return createRoute(train, sourceList);
 	}
 
+	/**
+	 * Method is used to find full route of a particular train
+	 */
 	private List<Route> createRoute(Train train, List<Source> sourceList) {
 		List<Route> routes = new ArrayList<>();
 		int total = sourceList.size();
@@ -239,6 +279,9 @@ public class TrainServiceImpl implements TrainService {
 		return routes;
 	}
 
+	/**
+	 * Method is used to change time to show formatted time on front UI
+	 */
 	private String changeTime(String time, int minutes) {
 		int hour = minutes / 60;
 		minutes %= 60;
@@ -253,50 +296,41 @@ public class TrainServiceImpl implements TrainService {
 		return hourMinute[0] + ":" + hourMinute[1];
 	}
 
+	/**
+	 * To get List of Booking of a particular user
+	 */
 	@Override
 	public List<Booking> getAllBookingByUser(User user) {
 		return bookingRepository.findAllByUser(user);
 	}
 
-//	@Override
-//	public boolean bookTicket(Booking booking) {
-//		System.out.println("Inside Book Ticket");
-//		Station sourceStation = findStationBySource(booking.getSource());
-//		int stationId = sourceStation.getStationId();
-//		System.out.println(stationId);
-//		Station stationDes = findStationByDestination(booking.getDestination());
-//		int destinationId = stationDes.getStationId();
-//		System.out.println(destinationId);
-//		Source source = sourceRepository.findSourceByStationAndTrain(booking.getTrain(), sourceStation);
-//
-//		System.out.println("got source object");
-//		booking.setPnr(generatePnr());
-//		booking.setSeatNo("46");
-//
-//		return false;
-//
-//	}
-
+	/**
+	 * Method is used to get Booking details using pnr number
+	 */
 	@Override
 	public Booking getBookingByPnr(String pnr) {
 		return bookingRepository.findByPnr(pnr);
 	}
 
+	/*
+	 * method used to Book the ticket for that particular train
+	 * 
+	 */
 	public boolean bookTicket(Booking booking, String source, String destination, LocalDate date, String train,
 			String email) {
-		
+
 		float newPrice = 0;
-		
+
 		Station sourceStation = findStationBySource(source);
-		
+
 		Station stationDes = findStationByDestination(destination);
-		
+
 		Train trainObj = trainRepository.getTrainByTrainNo(Integer.parseInt(train));
 		Source sourceObj = sourceRepository.findByStationAndTrain(sourceStation, trainObj);
 		Destination destinationObj = destinationRepository.findByStationAndTrain(stationDes, trainObj);
-		
+
 		User user = userRepository.findByEmail(email);
-		
+
 		float price = destinationObj.getPrice() - sourceObj.getPrice();
 		if (booking.getSeatType().equals("AC 1")) {
 			newPrice = price * 6;
@@ -307,7 +341,7 @@ public class TrainServiceImpl implements TrainService {
 		} else {
 			newPrice = price;
 		}
-		
+
 		booking.setTrain(trainObj);
 		booking.setSource(source);
 		booking.setDestination(destination);
@@ -315,7 +349,7 @@ public class TrainServiceImpl implements TrainService {
 		booking.setUser(user);
 		booking.setPrice(newPrice);
 		booking.setPnr(generatePnr());
-		
+
 		booking.setSeatNo(generateSeatNo(trainObj, booking.getSeatType(), date));
 		booking.setStatus("confirm");
 		bookingRepository.save(booking);
@@ -323,17 +357,28 @@ public class TrainServiceImpl implements TrainService {
 		return false;
 	}
 
+	/**
+	 * Mehtod is used to generate PNR number
+	 * 
+	 * @return
+	 */
 	private String generatePnr() {
 		int pnr = 181286;
 		Integer id = bookingRepository.findMaxBookingId();
 		return "PNR" + (pnr + id);
 	}
 
+	/**
+	 * Method is used to cancel the ticket
+	 */
 	public void cancelTicket(String pnr) {
 		bookingRepository.deleteByPnr(pnr);
-
 	}
 
+	/**
+	 * Method is used to generate seat no for user according to their booking
+	 * details
+	 */
 	public String generateSeatNo(Train train, String seatType, LocalDate date) {
 		List<Booking> bookingList = bookingRepository.findAllByTrainAndSeatTypeAndTravelDate(train, seatType, date);
 		int size = 0;
@@ -373,12 +418,19 @@ public class TrainServiceImpl implements TrainService {
 		return seat;
 	}
 
+	/*
+	 * method used to get the station object form the recived source
+	 */
 	public Station findStationBySource(String source) {
 		Station station = stationRepository.findByStationName(source);
 
 		return station;
 	}
 
+	/*
+	 * method used to get the station object form the recived destination
+	 * 
+	 */
 	public Station findStationByDestination(String destination) {
 		Station station = stationRepository.findByStationName(destination);
 

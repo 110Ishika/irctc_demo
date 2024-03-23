@@ -9,6 +9,9 @@ import anudip.project.irctc.entity.Source;
 import anudip.project.irctc.entity.Station;
 import anudip.project.irctc.entity.Train;
 
+/**
+ * Author: Ishika Dey
+ */
 @Repository
 public interface SourceRepository extends JpaRepository<Source, Integer> {
 	List<Source> findAllByStation(Station station);

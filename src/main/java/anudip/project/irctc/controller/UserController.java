@@ -52,9 +52,10 @@ public class UserController {
 		model.addAttribute("existedUser", true);
 		return "registration";
 	}
-	
+
 	/**
 	 * Method used to hit a particular html page
+	 * 
 	 * @param model - Model used to bind and transfer data to UI
 	 * @return - return to html page
 	 */
@@ -65,6 +66,14 @@ public class UserController {
 		return "registration";
 	}
 
+	/**
+	 * Method used to verify User based on user given otp
+	 * 
+	 * @param email        - email of user
+	 * @param verification - verification object used to get otp
+	 * @param model        - Model used to bind and transfer data to UI
+	 * @return - return to html page
+	 */
 	@GetMapping("/verify/{email}")
 	public String verifyUser(@PathVariable("email") String email,
 			@ModelAttribute("verification") UserVerification verification, Model model) {
@@ -78,6 +87,13 @@ public class UserController {
 		return "redirect:/verification?email=" + email;
 	}
 
+	/**
+	 * Method is used to hit html page with login object
+	 * 
+	 * @param model       - Model used to bind and transfer data to UI
+	 * @param httpSession - To Manage User Session
+	 * @return - return to html page
+	 */
 	@GetMapping("/login")
 	public String login(Model model, HttpSession httpSession) {
 
@@ -89,6 +105,15 @@ public class UserController {
 		return "login";
 	}
 
+	/**
+	 * Method is used to authenticate user and redirect to home page
+	 * 
+	 * @param login       - login object
+	 * @param result      - used to check server side validation
+	 * @param model       - Model used to bind and transfer data to UI
+	 * @param httpSession - To Manage User Session
+	 * @return - return to html page
+	 */
 	@PostMapping("/login")
 	public String login(@Valid @ModelAttribute("login") Login login, BindingResult result, Model model,
 			HttpSession httpSession) {
@@ -105,6 +130,13 @@ public class UserController {
 		return "login";
 	}
 
+	/**
+	 * Method used to hit home page
+	 * 
+	 * @param model       - Model used to bind and transfer data to UI
+	 * @param httpSession - To Manage User Session
+	 * @return - return to html page
+	 */
 	@GetMapping(value = "/home")
 	public String homePage(Model model, HttpSession httpSession) {
 
@@ -117,6 +149,12 @@ public class UserController {
 		return "home";
 	}
 
+	/**
+	 * method used to invalidate session and logout the user
+	 * 
+	 * @param httpSession - To Manage User Session
+	 * @return - return to html page
+	 */
 	@GetMapping("/logout")
 	public String logout(HttpSession httpSession) {
 		httpSession.invalidate();
